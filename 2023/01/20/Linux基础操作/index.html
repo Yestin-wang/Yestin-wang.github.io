@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本文介绍Linux系统下的vim操作、用户和组的管理、权限管理、文件目录操作、搜索查找、压缩解压、时间日期以及运行级别方面的基础操作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux基础操作(上)">
+<meta property="og:url" content="http://example.com/2023/01/20/Linux%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C/index.html">
+<meta property="og:site_name" content="来者可追，往之不谏">
+<meta property="og:description" content="本文介绍Linux系统下的vim操作、用户和组的管理、权限管理、文件目录操作、搜索查找、压缩解压、时间日期以及运行级别方面的基础操作">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-01-20T06:14:33.401Z">
+<meta property="article:modified_time" content="2023-01-28T00:15:11.546Z">
+<meta property="article:author" content="Yestin-王">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2023/01/20/Linux%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Linux基础操作(上) | 来者可追，往之不谏</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">来者可追，往之不谏</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">努力提升自己</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/01/20/Linux%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Yestin-王">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="来者可追，往之不谏">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux基础操作(上)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-01-20 14:14:33" itemprop="dateCreated datePublished" datetime="2023-01-20T14:14:33+08:00">2023-01-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-01-28 08:15:11" itemprop="dateModified" datetime="2023-01-28T08:15:11+08:00">2023-01-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">Linux学习</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>7 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本文介绍Linux系统下的vim操作、用户和组的管理、权限管理、文件目录操作、搜索查找、压缩解压、时间日期以及运行级别方面的基础操作</p>
+<span id="more"></span>
+
+<h3 id="vim常用快捷键"><a href="#vim常用快捷键" class="headerlink" title="vim常用快捷键"></a>vim常用快捷键</h3><ul>
+<li>拷贝当前行 [yy]	拷贝当前行的向下n  [nyy] 	粘贴  [p]</li>
+<li>删除当前行 [dd]	删除当前行向下n行 [ndd] </li>
+<li>查找关键字 	命令行状态    [&#x2F;关键字]</li>
+<li>设置文件的行号&#x2F;取消行号   命令行状态   [:set nu&#x2F;set nonu]</li>
+<li>编辑文件的最末行 [G]   最首行  [gg]</li>
+<li>撤销 [u]</li>
+<li>定位到具体行 [行号]+[shift]+[g]</li>
+<li>屏幕向下移动一页  [ctrl]+[f]</li>
+<li>屏幕向上移动一页  [ctrl]+[b]</li>
+<li>屏幕向下移动半页  [ctrl]+[d]</li>
+<li>屏幕向上移动半页  [ctrl]+[u]</li>
+<li>屏幕最上方的那一行 [H]</li>
+<li>屏幕中央的那一行 [M]</li>
+<li>下一行  [+]</li>
+<li>上一行  [-]</li>
+</ul>
+<h3 id="关机细节"><a href="#关机细节" class="headerlink" title="关机细节"></a>关机细节</h3><p>sync命令：把内存的数据同步到磁盘</p>
+<p>无论是重启还是关闭系统，首先要运行sync命令。尽管目前的shutdown&#x2F;reboot&#x2F;halt等命令均在关机前进行了sync，但小心起见，输一下sync以防万一。</p>
+<h3 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h3><ul>
+<li><p>添加用户：</p>
+<p><strong>useradd  用户名</strong></p>
+<p>用户创建成功后会自动创建与用户名同名目录保存在&#x2F;home目录下。也可以通过__useradd -d  指定目录  新的用户名__给新创建的用户指定家目录。</p>
+</li>
+<li><p>修改密码  <strong>passwd 用户名</strong></p>
+</li>
+<li><p>删除用户</p>
+</li>
+</ul>
+<p>​       用户的删除操作有两种，保留用户主目录的删除和不保留用户主目录的删除。</p>
+<p>​	   <strong>userdel  -r 用户名</strong>   	&#x2F;&#x2F;连带用户主目录一起删除</p>
+<p>​	   <strong>userdel  用户名</strong>		  &#x2F;&#x2F;只删除用户但保留用户主目录</p>
+<ul>
+<li>显示当前用户所在的目录 <strong>pwd</strong></li>
+<li>查询用户信息 <strong>id</strong></li>
+<li>切换用户 <strong>su</strong></li>
+<li>查看当前用户 <strong>whoami</strong>   <strong>who am i</strong>     显示的是登录的用户，用su切换用户依旧显示登录的用户信息</li>
+<li>用户组</li>
+</ul>
+<p>​	   新增组 <strong>groupadd 组名</strong></p>
+<p>​	   删除组 <strong>groupdel  组名</strong></p>
+<p>​	   添加用户时进组  <strong>useradd -g 用户组 用户名</strong></p>
+<p>​	   默认添加到用户名同名组</p>
+<p>​       修改用户的组 	<strong>usermod -g 用户组 用户名</strong></p>
+<ul>
+<li><p>用户和组相关文件：</p>
+<p>&#x2F;etc&#x2F;passwd 用户配置文件	</p>
+<p>&#x2F;etc&#x2F;shadow  口令配置文件</p>
+<p>&#x2F;etc&#x2F;group 	组配置文件</p>
+</li>
+</ul>
+<h3 id="运行级别"><a href="#运行级别" class="headerlink" title="运行级别"></a>运行级别</h3><p>0：关机</p>
+<p>1：单用户 （找回丢失密码）</p>
+<p>2：多用户状态没有网络服务</p>
+<p>3：多用户状态有网络服务</p>
+<p>4：系统未使用保留给用户</p>
+<p>5：图形界面</p>
+<p>6：系统重启</p>
+<p>init 指令切换</p>
+<h3 id="文件目录操作"><a href="#文件目录操作" class="headerlink" title="文件目录操作"></a>文件目录操作</h3><ul>
+<li><p><strong>ls</strong> </p>
+</li>
+<li><p>-a : 显示当前目录所有的文件和目录，包含隐藏文件</p>
+</li>
+<li><p>-l : 以列表的方式显示信息</p>
+</li>
+<li><p><strong>cd</strong> </p>
+<ul>
+<li>cd ~ 回到用户目录 如果当前是yestin用户，执行命令后pwd查看当前目录结果是 &#x2F;home&#x2F;yestin </li>
+<li>cd.. 返回上一级目录</li>
+</ul>
+</li>
+<li><p><strong>mkdir</strong> 创建目录</p>
+<ul>
+<li>-p 创建多级目录    mkdir -p &#x2F;home&#x2F;film&#x2F;FreeGuy   home目录下创建了film目录，film目录下创建了FreeGuy目录。</li>
+</ul>
+</li>
+<li><p><strong>rmdir</strong> 删除空目录</p>
+</li>
+</ul>
+<p>​		rmdir默认删除空目录，如果要删除非空目录，需要使用 rm-rf   其中-r表示递归删除，-f表示强制删除不提示</p>
+<ul>
+<li>__touch__创建空文件</li>
+</ul>
+<p>​		如 touch hello.txt</p>
+<ul>
+<li><p><strong>cp</strong> 拷贝文件到指定目录</p>
+<ul>
+<li>-r 递归复制整个文件夹</li>
+<li>遇见是否覆盖问题，可以通过\cp取消(y&#x2F;n)的频繁输入</li>
+</ul>
+</li>
+<li><p><strong>mv</strong>   移动文件（不同的文件目录下的操作）重命名（同一个文件目录下的操作）</p>
+</li>
+<li><p><strong>cat</strong>   查看文件内容  之查看不修改  -n显示行号</p>
+</li>
+<li><p><strong>more</strong> 和  <strong>less</strong> 命令</p>
+<ul>
+<li><p>more命令是一个基于VI编辑器的文本过滤器，以全屏的方式按页显示文本文件的内容。</p>
+</li>
+<li><p>less命令用来分屏擦好看文本的内容，它的功能与more命令类似。但是比more命令更强大，支持各种显示终端。它并不是一次性将整个文件加载后才显示，而是根据显示需要加载的内容。对于显示大型文件具有较高的效率。</p>
+<p>&#x2F;字串 向下搜寻	 n:向下查找    N:向上查找</p>
+<p>?字串 向上搜寻	 n:向上查找    N:向下查找</p>
+</li>
+</ul>
+</li>
+<li><p><strong>echo</strong> 输出内容到控制台</p>
+</li>
+<li><p><strong>head</strong> 显示文件的开头内容（默认前10行）</p>
+</li>
+</ul>
+<p>​		更改显示行数  -n 行数</p>
+<ul>
+<li><strong>tail</strong>  显示文件尾部内容 细节同head</li>
+</ul>
+<p>​	-f 实时追踪该文档的所有更新</p>
+<ul>
+<li>&gt; 输出重定向 （覆盖原有内容）			&gt;&gt;追加<ul>
+<li>ls  -l &gt;文件   列表的内容写入文件</li>
+<li>ls  -l &gt;&gt;文件   列表的内容追加写入文件</li>
+<li>cat 文件1&gt;文件2    将文件1覆盖写到文件2</li>
+<li>echo “内容”&gt;&gt;文件   内容追加写到文件中</li>
+</ul>
+</li>
+<li><strong>ln</strong>       建立软链接</li>
+</ul>
+<p>​		如 ln -s &#x2F;root &#x2F;home&#x2F;link   link为指向&#x2F;root的软链接  </p>
+<p>​		cd link 表面上是进入了link目录，实际上是进入到了&#x2F;root</p>
+<p>​		删除软连接  rm &#x2F;home&#x2F;link</p>
+<ul>
+<li><strong>history</strong> 查看历史命令</li>
+</ul>
+<h3 id="时间日期"><a href="#时间日期" class="headerlink" title="时间日期"></a>时间日期</h3><ul>
+<li><strong>date</strong>  显示当前日期</li>
+</ul>
+<p>​	date + ………..</p>
+<p>​	%Y%m%d%H%M%S  年月日时分秒 (区分大小写), 如果需要加空格加双引号  </p>
+<p>​	date -s “时间”  修改时间</p>
+<h3 id="搜索查找"><a href="#搜索查找" class="headerlink" title="搜索查找"></a>搜索查找</h3><ul>
+<li><p><strong>find</strong>   从指定目录向下递归遍历其各个子目录，将满足条件的文件或者目录显示在终端</p>
+<p>find[搜索范围][选项]</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-name&lt;查询方式&gt;</td>
+<td>按照指定的文件名查找模式查找文件</td>
+</tr>
+<tr>
+<td>-user&lt;用户名&gt;</td>
+<td>查找属于指定用户名所有文件</td>
+</tr>
+<tr>
+<td>-size&lt;文件大小 &gt;</td>
+<td>按照指定的文件大小查找文件 +[文件大小] 大于 -[]小于 []等于</td>
+</tr>
+</tbody></table>
+</li>
+<li><p><strong>locate</strong> 快速定位文件路径。 locate不遍历整个文件系统，利用事先建立的系统中所有文件名称及路径的locate数据库实现快速定位给定的文件</p>
+</li>
+</ul>
+<p>​		第一次运行前必须使用updatedb创建locate数据库</p>
+<ul>
+<li><p><strong>which</strong> 检索命令所在目录</p>
+</li>
+<li><p>__grep __ 过滤查找  </p>
+<p>通常和管道符”|”一起使用，”|”表示将前一个命令的处理结果输出传递给后面的命令处理。</p>
+<ul>
+<li>-n 显示匹配的行号</li>
+<li>-i  忽略字母大小写</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>请在hello.txt 文件中查找”yes”所在行，并显示行号</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> hello.txt |grep -n <span class="string">&quot;yes&quot;</span></span><br><span class="line">grep -n <span class="string">&quot;yes&quot;</span> hello.txt</span><br></pre></td></tr></table></figure>
+
+<h3 id="压缩解压"><a href="#压缩解压" class="headerlink" title="压缩解压"></a>压缩解压</h3><ul>
+<li><p><strong>gzip</strong> 压缩	<strong>gunzip</strong> 解压(解压和压缩后不会创建源文件副本)</p>
+</li>
+<li><p><strong>zip</strong>&#x2F;<strong>unzip</strong></p>
+<ul>
+<li><p>zip -r 递归压缩，压缩目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zip -r myhome.zip /home/  [将home目录及其包含的文件和子文件压缩到myhome.zip中]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>unzip -d &lt;dir&gt;  指定解压后文件的存放目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unzip -d /root /home/myhome.zip  [将myhome.zip解压到/root下]</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><strong>tar</strong> 打包&amp;解压</p>
+</li>
+</ul>
+<p>​		打包的文件是.tar.gz后缀</p>
+<p>​		tar [选项] XXX.tar.gz 打包的内容</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-c</td>
+<td>产生.tar打包文件</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>显示详细信息</td>
+</tr>
+<tr>
+<td>-f</td>
+<td>指定压缩后的文件名</td>
+</tr>
+<tr>
+<td>-z</td>
+<td>打包同时压缩</td>
+</tr>
+<tr>
+<td>-x</td>
+<td>解包.tar 文件</td>
+</tr>
+</tbody></table>
+<p>案例演示</p>
+<blockquote>
+<p>压缩多个文件，将&#x2F;home&#x2F;pig.txt 和 &#x2F;home&#x2F;cat.txt 压缩成 animal.tar.gz</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zcvf animal.tar.gz /home/pig.txt /home/cat.txt</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>将 animal.tar.gz 解压到当前文件目录下</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf animal.tar.gz</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>将animal.tar.gz 解压到&#x2F;opt&#x2F;test文件目录下</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf /home/animal.tar.gz -C /opt/test</span><br></pre></td></tr></table></figure>
+
+<h3 id="组管理"><a href="#组管理" class="headerlink" title="组管理"></a>组管理</h3><ul>
+<li>组操作</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>解释</th>
+<th align="left">备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>groupadd</strong></td>
+<td>组创建</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td><strong>chgrp</strong></td>
+<td>修改文件所在组</td>
+<td align="left">chgrp 组名 文件名</td>
+</tr>
+<tr>
+<td><strong>usermod</strong></td>
+<td>修改用户所在组</td>
+<td align="left">usermod -g  改变用户所在组                                                              usermod-d  改变用户登录的初始目录</td>
+</tr>
+</tbody></table>
+<h3 id="权限管理"><a href="#权限管理" class="headerlink" title="权限管理"></a>权限管理</h3><ul>
+<li>权限说明</li>
+</ul>
+<blockquote>
+<p>drwxr-xr-x. 2 root root		6  </p>
+</blockquote>
+<p>说明 </p>
+<p>(对应文件：[<strong>r</strong>] 可读 [<strong>w</strong>]可写 [<strong>x</strong>]可执行</p>
+<p> 对应目录：[<strong>r</strong>] 可读，可查看目录内容 [<strong>w</strong>]对目录可创建删除重命名 [<strong>x</strong>]可进入该目录</p>
+<p> r&#x3D;4,w&#x3D;2,x&#x3D;1		)</p>
+<ol>
+<li><strong><span style='background:yellow'>d</span>spanrwxr-xr-x. 2 root root		6</strong></li>
+</ol>
+<p>  	</p>
+<p>​	   文件类型(d,-,l,c,b)  l:链接	d:目录 	c:字符设备文件	b:块设备</p>
+<ol start="2">
+<li><p><strong>d<span style='background:yellow'>rwx</span>r-xr-x. 2 root root		6</strong>  	</p>
+<p>该文件所有者拥有的权限</p>
+</li>
+<li><p>__drwx<span style='background:yellow'>r-x</span>r-x. 2 root root		6 __</p>
+</li>
+</ol>
+<p>	</p>
+<p>​		该文件所属组拥有的权限</p>
+<ol start="4">
+<li>__drwxr-x<span style='background:yellow'>r-x</span>. 2 root root		6 __</li>
+</ol>
+<p>	</p>
+<p>​		其他用户拥有该文件的权限</p>
+<ol start="5">
+<li>__drwxr-xr-x. <span style='background:yellow'> 2 root root		6</span> __</li>
+</ol>
+<p>	</p>
+<p>​		2			 文件：硬连接数 	目录：子目录数</p>
+<p>​		root		用户</p>
+<p>​		root		组</p>
+<p>​		6			 文件大小（单位：字节）</p>
+<ul>
+<li><strong>chmod</strong>   修改权限 (u:所有者 g:所有组 o:其他人 a:所有用户	r&#x3D;4,w&#x3D;2,x&#x3D;1)</li>
+</ul>
+<blockquote>
+<p>给test.txt的所有者rwx权限，所在组rx权限，其他组r权限</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> u=rwx,g=rx,o=x test.txt    //法一</span><br><span class="line"><span class="built_in">chmod</span> 751 test.txt 	 //法二 以下两个示例也可用这种方式写</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>给test.txt的所有者除去执行权限，增加组w权限</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> u-x,g+w test.txt</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>给test.txt的所有用户添加r权限</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> a+r test.txt</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>chown</strong> 修改文件所有者</li>
+</ul>
+<p>​	<strong>chown newowner 文件&#x2F;目录</strong> 改变所有者</p>
+<p>​    <strong>chown newowner:newgroup 文件&#x2F;目录</strong> 改变所有者和所有组</p>
+<p>​	<strong>-R</strong> 如果是目录 则使其下所有子文件或者目录递归生效</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/01/19/C++%E4%B8%AD%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84%E4%BD%9C%E4%B8%BA%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0/" rel="prev" title="C++中二维数组作为函数的参数">
+      <i class="fa fa-chevron-left"></i> C++中二维数组作为函数的参数
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/01/20/free%20guy/" rel="next" title="Free Guy">
+      Free Guy <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#vim%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE"><span class="nav-number">1.</span> <span class="nav-text">vim常用快捷键</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E6%9C%BA%E7%BB%86%E8%8A%82"><span class="nav-number">2.</span> <span class="nav-text">关机细节</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">用户管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E7%BA%A7%E5%88%AB"><span class="nav-number">4.</span> <span class="nav-text">运行级别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C"><span class="nav-number">5.</span> <span class="nav-text">文件目录操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%B6%E9%97%B4%E6%97%A5%E6%9C%9F"><span class="nav-number">6.</span> <span class="nav-text">时间日期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%90%9C%E7%B4%A2%E6%9F%A5%E6%89%BE"><span class="nav-number">7.</span> <span class="nav-text">搜索查找</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%8B%E7%BC%A9%E8%A7%A3%E5%8E%8B"><span class="nav-number">8.</span> <span class="nav-text">压缩解压</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E7%AE%A1%E7%90%86"><span class="nav-number">9.</span> <span class="nav-text">组管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86"><span class="nav-number">10.</span> <span class="nav-text">权限管理</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Yestin-王</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Yestin-wang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Yestin-wang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yestin-王</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">33k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:01</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

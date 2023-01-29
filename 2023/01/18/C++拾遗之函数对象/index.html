@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="函数对象在C++编程中尤为重要，它可以帮助我们实现STL库中的函数按照自己的方法来实现功能，以及自定义数据结构的排序、查找等功能。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++函数对象">
+<meta property="og:url" content="http://example.com/2023/01/18/C++%E6%8B%BE%E9%81%97%E4%B9%8B%E5%87%BD%E6%95%B0%E5%AF%B9%E8%B1%A1/index.html">
+<meta property="og:site_name" content="来者可追，往之不谏">
+<meta property="og:description" content="函数对象在C++编程中尤为重要，它可以帮助我们实现STL库中的函数按照自己的方法来实现功能，以及自定义数据结构的排序、查找等功能。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-01-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-01-28T00:14:30.793Z">
+<meta property="article:author" content="Yestin-王">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2023/01/18/C++%E6%8B%BE%E9%81%97%E4%B9%8B%E5%87%BD%E6%95%B0%E5%AF%B9%E8%B1%A1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>C++函数对象 | 来者可追，往之不谏</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">来者可追，往之不谏</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">努力提升自己</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/01/18/C++%E6%8B%BE%E9%81%97%E4%B9%8B%E5%87%BD%E6%95%B0%E5%AF%B9%E8%B1%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Yestin-王">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="来者可追，往之不谏">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++函数对象
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-01-18 00:00:00" itemprop="dateCreated datePublished" datetime="2023-01-18T00:00:00+08:00">2023-01-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-01-28 08:14:30" itemprop="dateModified" datetime="2023-01-28T08:14:30+08:00">2023-01-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C-%E6%8B%BE%E9%81%97/" itemprop="url" rel="index"><span itemprop="name">C++拾遗</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>10 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>函数对象在C++编程中尤为重要，它可以帮助我们实现STL库中的函数按照自己的方法来实现功能，以及自定义数据结构的排序、查找等功能。</p>
+<span id="more"></span>
+
+<h2 id="1-概念"><a href="#1-概念" class="headerlink" title="1 概念"></a>1 概念</h2><ul>
+<li>函数对象是重载函数调用操作符的类的对象，也叫仿函数</li>
+<li>函数对象可以有参数和返回值，可以作为参数传递</li>
+</ul>
+<p>​	以下代码是一个仿函数实例，可以通过重载小括号实现两个数的相加。当然，不仅可以实现加法功能，四则运算，排序，输出打印功能均可实现。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//一个仿函数实例</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">FunctorAdd</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="type">int</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="type">int</span> v1, <span class="type">int</span> v2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>-&gt;count += <span class="number">1</span>;<span class="comment">//每次调用count+1</span></span><br><span class="line">		<span class="keyword">return</span> v1 + v2;<span class="comment">//实际实现了括号的两个数相加</span></span><br><span class="line">	&#125;</span><br><span class="line">    <span class="type">int</span> count;<span class="comment">//记录运行加法的次数</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	FunctorAdd add;</span><br><span class="line">	cout &lt;&lt; <span class="built_in">add</span>(<span class="number">10</span>, <span class="number">10</span>) &lt;&lt; endl;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>​	上述代码还可以发现，如果在仿函数类中设置一个能够记录状态的变量（本例中的count），我们可以根据需求记录函数对象的状态。</p>
+<p>​	仿函数的写法非常的灵活，也可以作为参数进行传递。如下面这段代码。doAdd()函数实现的功能即为两个数的相加。运行结果为35.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">doAdd</span><span class="params">(FunctorAdd func, <span class="type">int</span> v1, <span class="type">int</span> v2)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="built_in">func</span>(v1, v2);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	FunctorAdd func;</span><br><span class="line">	cout &lt;&lt; <span class="built_in">doAdd</span>(func,<span class="number">12</span>, <span class="number">23</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-谓词"><a href="#2-谓词" class="headerlink" title="2 谓词"></a>2 谓词</h2><ul>
+<li>返回类型为bool的仿函数称为谓词</li>
+<li>operator()接受一个参数称为一元谓词</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//一元谓词</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">FunctorGF</span>&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="type">int</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="type">int</span> val)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> val &gt; <span class="number">5</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	vector&lt;<span class="type">int</span>&gt;v = &#123; <span class="number">1</span>,<span class="number">34</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">43</span>,<span class="number">34</span>,<span class="number">23</span>,<span class="number">43</span>,<span class="number">2</span>,<span class="number">34</span>,<span class="number">343</span>,<span class="number">423</span>,<span class="number">42</span>,<span class="number">4</span> &#125;;</span><br><span class="line">	vector&lt;<span class="type">int</span>&gt;::iterator iter;</span><br><span class="line">	<span class="comment">// FunctorGF()匿名函数对象,查找有没有大于5的数字</span></span><br><span class="line">	iter=<span class="built_in">find_if</span>(v.<span class="built_in">begin</span>(), v.<span class="built_in">end</span>(), <span class="built_in">FunctorGF</span>());</span><br><span class="line">	<span class="keyword">if</span> (iter == v.<span class="built_in">end</span>()) &#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;not find&quot;</span> &lt;&lt; endl;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;at least a number is greater than 5&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>operator()接受两个参数称为二元谓词</li>
+</ul>
+<p>​	二元谓词最经典的案例就是排序了。STL中很多容器都可以加入自定义的排序规则。不妨写一个set容器的降序排列的实现方法作为二元谓词的案例。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//二元谓词</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">FunctorCmp</span>&#123;	</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="type">int</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="type">int</span> v1,<span class="type">int</span> v2)</span><span class="type">const</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> v1 &gt; v2;<span class="comment">//实现降序排列</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	set&lt;<span class="type">int</span>,FunctorCmp&gt;s = &#123; <span class="number">1</span>,<span class="number">34</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">43</span>,<span class="number">34</span>,<span class="number">23</span>,<span class="number">43</span>,<span class="number">2</span>,<span class="number">34</span>,<span class="number">343</span>,<span class="number">423</span>,<span class="number">42</span>,<span class="number">4</span> &#125;;</span><br><span class="line">	set&lt;<span class="type">int</span>&gt;::iterator iter;</span><br><span class="line">	<span class="keyword">for</span> (iter = s.<span class="built_in">begin</span>();iter != s.<span class="built_in">end</span>();iter++)</span><br><span class="line">		cout &lt;&lt; *iter &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>输出为:</p>
+<blockquote>
+<p>423 343 43 42 34 23 4 3 2 1</p>
+</blockquote>
+<h2 id="3-内建函数对象"><a href="#3-内建函数对象" class="headerlink" title="3 内建函数对象"></a>3 内建函数对象</h2><p>​	STL内建了一些函数对象，整体分为关系仿函数、逻辑仿函数和算术仿函数三类。这些仿函数所产生的对象用法和一般函数完全相同，但使用时需要引入头文件</p>
+<blockquote>
+<p>#include &lt;function&gt;</p>
+</blockquote>
+<h3 id="3-1-关系仿函数"><a href="#3-1-关系仿函数" class="headerlink" title="3.1 关系仿函数"></a>3.1 关系仿函数</h3><blockquote>
+<p>template<class T>  bool  equal_to<T>  &#x2F;&#x2F;等于</p>
+<p>template<class T>  bool  not_ equal_to<T>  &#x2F;&#x2F;不等于</p>
+<p>template<class T>  bool  greater<T>  &#x2F;&#x2F;大于</p>
+<p>template<class T>  bool  greater_equal<T>  &#x2F;&#x2F;大于等于</p>
+<p>template<class T>  bool  less<T>  &#x2F;&#x2F;小于</p>
+<p>template<class T>  bool  less_equal<T>  &#x2F;&#x2F;小于等于</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	vector&lt;<span class="type">int</span>&gt; test;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>;i &lt; <span class="number">10</span>;i++) &#123;</span><br><span class="line">		test.<span class="built_in">push_back</span>(i * <span class="number">3</span>);<span class="comment">//0 3 6 9 12 15 18 21 24 27</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">sort</span>(test.<span class="built_in">begin</span>(), test.<span class="built_in">end</span>(), <span class="built_in">greater</span>&lt;<span class="type">int</span>&gt;());<span class="comment">//把它整成降序</span></span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;descending order：&quot;</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>;i &lt; <span class="number">10</span>;i++) &#123;</span><br><span class="line">		cout &lt;&lt; test[i] &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	cout &lt;&lt; endl;</span><br><span class="line">	<span class="built_in">sort</span>(test.<span class="built_in">begin</span>(), test.<span class="built_in">end</span>(), <span class="built_in">less</span>&lt;<span class="type">int</span>&gt;());<span class="comment">//再把它整成升序</span></span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;increasing order：&quot;</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>;i &lt; <span class="number">10</span>;i++) &#123;</span><br><span class="line">		cout &lt;&lt; test[i] &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>输出结果</p>
+<blockquote>
+<p>descending order：27 24 21 18 15 12 9 6 3 0<br>increasing order：0 3 6 9 12 15 18 21 24 27</p>
+</blockquote>
+<h3 id="3-2-逻辑仿函数"><a href="#3-2-逻辑仿函数" class="headerlink" title="3.2 逻辑仿函数"></a>3.2 逻辑仿函数</h3><p>​	实现与或非的逻辑运算</p>
+<blockquote>
+<p>template<class T> bool logical_and<T>  &#x2F;&#x2F;逻辑与</p>
+<p>template<class T> bool logical_or<T>  &#x2F;&#x2F;逻辑或</p>
+<p>template<class T> bool logical_not<T>  &#x2F;&#x2F;逻辑非</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	vector&lt;<span class="type">bool</span>&gt; v1 = &#123; <span class="literal">true</span>, <span class="literal">false</span>, <span class="literal">true</span>, <span class="literal">false</span>, <span class="literal">true</span> &#125;;</span><br><span class="line">	vector&lt;<span class="type">bool</span>&gt; v2 = &#123; <span class="literal">true</span>, <span class="literal">true</span>, <span class="literal">false</span>, <span class="literal">false</span>, <span class="literal">true</span> &#125;;</span><br><span class="line">	vector&lt;<span class="type">bool</span>&gt; res;</span><br><span class="line">	res.<span class="built_in">resize</span>(v1.<span class="built_in">size</span>());</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;raw data v1: &quot;</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>;i &lt; <span class="number">5</span>;i++) &#123;</span><br><span class="line">		cout &lt;&lt; v1[i] &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	cout &lt;&lt; endl;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;raw data v2: &quot;</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>;i &lt; <span class="number">5</span>;i++) &#123;</span><br><span class="line">		cout &lt;&lt; v2[i] &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	cout &lt;&lt; endl;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;logical not data: &quot;</span>;</span><br><span class="line">	cout &lt;&lt; endl;</span><br><span class="line">	<span class="comment">//用transform函数实现数据转化，存储在res容器中</span></span><br><span class="line">	<span class="built_in">transform</span>(v1.<span class="built_in">begin</span>(), v1.<span class="built_in">end</span>(), res.<span class="built_in">begin</span>(), <span class="built_in">logical_not</span>&lt;<span class="type">bool</span>&gt;());</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>;i &lt; <span class="number">5</span>;i++) &#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot; not &quot;</span> &lt;&lt; v1[i] &lt;&lt; <span class="string">&quot; = &quot;</span> &lt;&lt; res[i] &lt;&lt; endl;</span><br><span class="line">	&#125;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;logical and data: &quot;</span>;</span><br><span class="line">	cout &lt;&lt; endl;</span><br><span class="line">	<span class="built_in">transform</span>(v1.<span class="built_in">begin</span>(), v1.<span class="built_in">end</span>(), v2.<span class="built_in">begin</span>(), res.<span class="built_in">begin</span>(), <span class="built_in">logical_and</span>&lt;<span class="type">bool</span>&gt;());</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>;i &lt; <span class="number">5</span>;i++) &#123;</span><br><span class="line">		cout &lt;&lt;v1[i] &lt;&lt; <span class="string">&quot; and &quot;</span> &lt;&lt; v2[i] &lt;&lt; <span class="string">&quot; = &quot;</span> &lt;&lt; res[i] &lt;&lt; endl;</span><br><span class="line">	&#125;</span><br><span class="line">	cout &lt;&lt; endl;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;logical or data: &quot;</span>;</span><br><span class="line">	cout &lt;&lt; endl;</span><br><span class="line">	<span class="built_in">transform</span>(v1.<span class="built_in">begin</span>(), v1.<span class="built_in">end</span>(), v2.<span class="built_in">begin</span>(), res.<span class="built_in">begin</span>(), <span class="built_in">logical_or</span>&lt;<span class="type">bool</span>&gt;());</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>;i &lt; <span class="number">5</span>;i++) &#123;</span><br><span class="line">		cout &lt;&lt; v1[i] &lt;&lt; <span class="string">&quot; or &quot;</span> &lt;&lt; v2[i] &lt;&lt; <span class="string">&quot; = &quot;</span> &lt;&lt;res[i] &lt;&lt; endl;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>输出结果：</p>
+<blockquote>
+<p>raw data v1: 1 0 1 0 1<br>raw data v2: 1 1 0 0 1<br>logical not data:<br>not 1 &#x3D; 0<br>not 0 &#x3D; 1<br>not 1 &#x3D; 0<br>not 0 &#x3D; 1<br>not 1 &#x3D; 0<br>logical and data:<br>1 and 1 &#x3D; 1<br>0 and 1 &#x3D; 0<br>1 and 0 &#x3D; 0<br>0 and 0 &#x3D; 0<br>1 and 1 &#x3D; 1</p>
+<p>logical or data:<br>1 or 1 &#x3D; 1<br>0 or 1 &#x3D; 1<br>1 or 0 &#x3D; 1<br>0 or 0 &#x3D; 0<br>1 or 1 &#x3D; 1</p>
+</blockquote>
+<h3 id="3-3-算术仿函数"><a href="#3-3-算术仿函数" class="headerlink" title="3.3 算术仿函数"></a>3.3 算术仿函数</h3><blockquote>
+<p>template<class T>  T plus<T>	   	 &#x2F;&#x2F;加法仿函数</p>
+<p>template<class T>  T minus<T>	    &#x2F;&#x2F;减法仿函数</p>
+<p>template<class T>  T multiplies<T> &#x2F;&#x2F;乘法仿函数</p>
+<p>template<class T>  T divides<T>	  &#x2F;&#x2F;除法仿函数</p>
+<p>template<class T>  T negate<T>	  &#x2F;&#x2F;取反仿函数</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">FunctorCmp</span>&#123;	</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="type">int</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="type">int</span> v1,<span class="type">int</span> v2)</span><span class="type">const</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> v1 &gt; v2;<span class="comment">//实现降序排列</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	plus&lt;<span class="type">int</span>&gt;plus;</span><br><span class="line">	minus&lt;<span class="type">int</span>&gt;min;</span><br><span class="line">	multiplies&lt;<span class="type">int</span>&gt;mul;</span><br><span class="line">	divides&lt;<span class="type">int</span>&gt;div;</span><br><span class="line">	negate&lt;<span class="type">int</span>&gt;neg;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;plus functor: 13+14=&quot;</span> &lt;&lt; <span class="built_in">plus</span>(<span class="number">13</span>, <span class="number">14</span>) &lt;&lt; endl;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;minus functor: 13-14=&quot;</span> &lt;&lt; <span class="built_in">min</span>(<span class="number">13</span>, <span class="number">14</span>) &lt;&lt; endl;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;multiplies functor: 13*14=&quot;</span> &lt;&lt; <span class="built_in">mul</span>(<span class="number">13</span>, <span class="number">14</span>) &lt;&lt; endl;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;divides functor: 28/14=&quot;</span> &lt;&lt; <span class="built_in">div</span>(<span class="number">28</span>, <span class="number">14</span>) &lt;&lt; endl;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;negate functor: -20=&quot;</span> &lt;&lt; <span class="built_in">neg</span>(<span class="number">20</span>) &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>输出结果：</p>
+<blockquote>
+<p>plus functor: 13+14&#x3D;27<br>minus functor: 13-14&#x3D;-1<br>multiplies functor: 13*14&#x3D;182<br>divides functor: 28&#x2F;14&#x3D;2<br>negate functor: -20&#x3D;-20</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"># C++</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2023/01/19/C++%E4%B8%AD%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84%E4%BD%9C%E4%B8%BA%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0/" rel="next" title="C++中二维数组作为函数的参数">
+      C++中二维数组作为函数的参数 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">1 概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%B0%93%E8%AF%8D"><span class="nav-number">2.</span> <span class="nav-text">2 谓词</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%86%85%E5%BB%BA%E5%87%BD%E6%95%B0%E5%AF%B9%E8%B1%A1"><span class="nav-number">3.</span> <span class="nav-text">3 内建函数对象</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E5%85%B3%E7%B3%BB%E4%BB%BF%E5%87%BD%E6%95%B0"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 关系仿函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E9%80%BB%E8%BE%91%E4%BB%BF%E5%87%BD%E6%95%B0"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 逻辑仿函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E7%AE%97%E6%9C%AF%E4%BB%BF%E5%87%BD%E6%95%B0"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 算术仿函数</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Yestin-王</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Yestin-wang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Yestin-wang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yestin-王</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">33k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:01</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
