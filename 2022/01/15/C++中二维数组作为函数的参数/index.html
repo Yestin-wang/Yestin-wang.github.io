@@ -20,19 +20,20 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="定时任务调度 crontab  定时任务设置  ​		-e   	编辑crontab定时任务 ​        -l		查询crontab任务	 ​	    -r		删除当前用户所有的crontab任务">
+  <meta name="description" content="最近发现对c++的二维数组的传参产生遗忘，写此文来回顾下二维数组作为函数参数形式的传递。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux基础操作（下）">
-<meta property="og:url" content="http://example.com/2023/01/24/Linux%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C2/index.html">
+<meta property="og:title" content="C++中二维数组作为函数的参数">
+<meta property="og:url" content="http://example.com/2022/01/15/C++%E4%B8%AD%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84%E4%BD%9C%E4%B8%BA%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0/index.html">
 <meta property="og:site_name" content="来者可追，往之不谏">
-<meta property="og:description" content="定时任务调度 crontab  定时任务设置  ​		-e   	编辑crontab定时任务 ​        -l		查询crontab任务	 ​	    -r		删除当前用户所有的crontab任务">
+<meta property="og:description" content="最近发现对c++的二维数组的传参产生遗忘，写此文来回顾下二维数组作为函数参数形式的传递。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-01-24T08:25:23.158Z">
-<meta property="article:modified_time" content="2023-01-27T09:33:47.841Z">
+<meta property="article:published_time" content="2022-01-14T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-01-31T00:55:46.730Z">
 <meta property="article:author" content="Yestin-王">
+<meta property="article:tag" content="C++">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/2023/01/24/Linux%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C2/">
+<link rel="canonical" href="http://example.com/2022/01/15/C++%E4%B8%AD%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84%E4%BD%9C%E4%B8%BA%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0/">
 
 
 <script id="page-configurations">
@@ -45,7 +46,7 @@
   };
 </script>
 
-  <title>Linux基础操作（下） | 来者可追，往之不谏</title>
+  <title>C++中二维数组作为函数的参数 | 来者可追，往之不谏</title>
   
 
 
@@ -161,7 +162,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/01/24/Linux%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C2/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/15/C++%E4%B8%AD%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84%E4%BD%9C%E4%B8%BA%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -174,7 +175,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Linux基础操作（下）
+          C++中二维数组作为函数的参数
         </h1>
 
         <div class="post-meta">
@@ -184,14 +185,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2023-01-24 16:25:23" itemprop="dateCreated datePublished" datetime="2023-01-24T16:25:23+08:00">2023-01-24</time>
+              <time title="创建时间：2022-01-15 00:00:00" itemprop="dateCreated datePublished" datetime="2022-01-15T00:00:00+08:00">2022-01-15</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-01-27 17:33:47" itemprop="dateModified" datetime="2023-01-27T17:33:47+08:00">2023-01-27</time>
+                <time title="修改时间：2023-01-31 08:55:46" itemprop="dateModified" datetime="2023-01-31T08:55:46+08:00">2023-01-31</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -199,7 +200,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">Linux学习</span></a>
+                  <a href="/categories/C-%E6%8B%BE%E9%81%97/" itemprop="url" rel="index"><span itemprop="name">C++拾遗</span></a>
                 </span>
             </span>
 
@@ -209,14 +210,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>443</span>
+              <span>898</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>2 分钟</span>
             </span>
 
         </div>
@@ -228,37 +229,27 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h3 id="定时任务调度"><a href="#定时任务调度" class="headerlink" title="定时任务调度"></a>定时任务调度</h3><ul>
-<li><strong>crontab</strong>  定时任务设置</li>
-</ul>
-<p>​		-e   	编辑crontab定时任务</p>
-<p>​        -l		查询crontab任务	</p>
-<p>​	    -r		删除当前用户所有的crontab任务 </p>
+        <p>最近发现对c++的二维数组的传参产生遗忘，写此文来回顾下二维数组作为函数参数形式的传递。</p>
 <span id="more"></span>
 
-<h3 id="磁盘"><a href="#磁盘" class="headerlink" title="磁盘"></a>磁盘</h3><ul>
-<li>对新增加的硬盘sdb分区</li>
-</ul>
-<p>​		分区命令 <strong>fdisk</strong>  &#x2F;dev&#x2F;sdb</p>
-<p>​		m 显示命令列表	p 显示磁盘分区	n 新增分区	d 删除分区	w 写入并退出</p>
-<ul>
-<li>格式化</li>
-</ul>
-<p>​		分区后输入 <strong>lsblk -f</strong>  命令可以发现sdb下已有了新的分区，但没有UUID，说明并未格式化</p>
-<p>​		格式化操作  <strong>mkfs -t ext4 &#x2F;dev&#x2F;sdb1</strong></p>
-<p>​		再次输入 <strong>lsblk -f</strong> 后便发现sdb下的新分区已有了UUID</p>
-<ul>
-<li><p>挂载	</p>
-<p>作为挂载点的目录理论上为空目录。如果不是空目录，挂在后源目录的文件都会被隐藏，直到新分区被卸载原内容才会再次跑出来。</p>
-<p>单一目录不应该重复挂载多个文件系统</p>
-<p>单一文件系统不应该被重复挂载在不同的挂载点上</p>
-<p>挂载命令 <strong>mount</strong></p>
-<p>卸载命令 <strong>umount</strong></p>
-<p><font color='red'>注</font> 用命令行挂载重启后会失效</p>
-</li>
-</ul>
-<p>​	   <span style='background:yellow'>永久挂载:</span>  通过修改 &#x2F;etc&#x2F;fstab实现挂载，添加完成后执行 <strong>mount -a</strong> 即刻生效</p>
-<p>​	</p>
+<h3 id="固定维度"><a href="#固定维度" class="headerlink" title="固定维度"></a>固定维度</h3><p>先定义一个三行三列数组</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> arr[<span class="number">3</span>][<span class="number">3</span>] = &#123; &#123;<span class="number">1</span>,<span class="number">2</span>&#125;,&#123;<span class="number">2</span>,<span class="number">3</span>&#125;,&#123;<span class="number">2</span>,<span class="number">3</span>&#125; &#125;;</span><br></pre></td></tr></table></figure>
+
+<p>二维数组作为函数的参数，总体只有以下几种写法。函数的参数声明中必须指出数组的列数，与数组的行数没有太大的关系。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">test01</span><span class="params">(<span class="type">int</span> (*array)[<span class="number">3</span>])</span> </span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;(*array)[3]传参成功&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test02</span><span class="params">(<span class="type">int</span> array[<span class="number">3</span>][<span class="number">3</span>])</span> </span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;array[3][3]传参成功&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test03</span><span class="params">(<span class="type">int</span> array[][<span class="number">3</span>])</span> </span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;array[][3]传参成功&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以下几种方式是不合法的</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">test04</span><span class="params">(<span class="type">int</span> array[][])</span></span>&#123;&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test05</span><span class="params">(<span class="type">int</span> array[<span class="number">3</span>][])</span></span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意，这种写法是相当于声明了一个数组，该数组包含着3个指向整型对象的指针</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">test06</span><span class="params">(<span class="type">int</span> *arr[<span class="number">3</span>])</span></span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="动态二维数组"><a href="#动态二维数组" class="headerlink" title="动态二维数组"></a>动态二维数组</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">vla</span><span class="params">(<span class="type">int</span> m,<span class="type">int</span> n,<span class="type">int</span> arr[m][n])</span></span>&#123;&#125;		<span class="comment">//正确</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">vla</span><span class="params">(<span class="type">int</span> arr[m][n]，<span class="type">int</span> m,<span class="type">int</span> n)</span></span>&#123;&#125;	   <span class="comment">//错误</span></span><br></pre></td></tr></table></figure>
+
+<p>很奇怪，VS 2022社区版的编译器竟然不支持VLA。</p>
+<h3 id="vector的形式使用二维数组"><a href="#vector的形式使用二维数组" class="headerlink" title="vector的形式使用二维数组"></a>vector的形式使用二维数组</h3><p>对于不支持VLA的编译器完全可以用vector替代数组形式。如建立一个n行n列的布尔型二维数组变量</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> n = <span class="number">3</span>;</span><br><span class="line">vector &lt; vector&lt;<span class="type">bool</span>&gt;&gt; <span class="built_in">putQ</span>(n,<span class="built_in">vector</span>&lt;<span class="type">bool</span>&gt;(n,<span class="literal">true</span>));<span class="comment">//设置初值为真</span></span><br></pre></td></tr></table></figure>
+
 
     </div>
 
@@ -267,19 +258,19 @@
     
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"># C++</a>
+          </div>
 
         
 
 
         
     <div class="post-nav">
+      <div class="post-nav-item"></div>
       <div class="post-nav-item">
-    <a href="/2023/01/20/free%20guy/" rel="prev" title="Free Guy">
-      <i class="fa fa-chevron-left"></i> Free Guy
-    </a></div>
-      <div class="post-nav-item">
-    <a href="/2023/01/27/C++11/" rel="next" title="C++11新特性(1)">
-      C++11新特性(1) <i class="fa fa-chevron-right"></i>
+    <a href="/2022/01/18/C++%E6%8B%BE%E9%81%97%E4%B9%8B%E5%87%BD%E6%95%B0%E5%AF%B9%E8%B1%A1/" rel="next" title="C++函数对象">
+      C++函数对象 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -339,7 +330,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6"><span class="nav-number">1.</span> <span class="nav-text">定时任务调度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A3%81%E7%9B%98"><span class="nav-number">2.</span> <span class="nav-text">磁盘</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BA%E5%AE%9A%E7%BB%B4%E5%BA%A6"><span class="nav-number">1.</span> <span class="nav-text">固定维度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84"><span class="nav-number">2.</span> <span class="nav-text">动态二维数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vector%E7%9A%84%E5%BD%A2%E5%BC%8F%E4%BD%BF%E7%94%A8%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84"><span class="nav-number">3.</span> <span class="nav-text">vector的形式使用二维数组</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

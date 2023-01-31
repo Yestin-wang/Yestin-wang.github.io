@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="​	本文主要讲述C++11标准中自动类型推导的功能，详述auto与decltype的使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++11新特性（2）">
+<meta property="og:url" content="http://example.com/2023/01/30/%E8%87%AA%E5%8A%A8%E7%B1%BB%E5%9E%8B%E6%8E%A8%E5%AF%BC(C++11)/index.html">
+<meta property="og:site_name" content="来者可追，往之不谏">
+<meta property="og:description" content="​	本文主要讲述C++11标准中自动类型推导的功能，详述auto与decltype的使用">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-01-30T15:12:19.356Z">
+<meta property="article:modified_time" content="2023-01-31T03:51:37.230Z">
+<meta property="article:author" content="Yestin-王">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2023/01/30/%E8%87%AA%E5%8A%A8%E7%B1%BB%E5%9E%8B%E6%8E%A8%E5%AF%BC(C++11)/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>C++11新特性（2） | 来者可追，往之不谏</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">来者可追，往之不谏</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">努力提升自己</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/01/30/%E8%87%AA%E5%8A%A8%E7%B1%BB%E5%9E%8B%E6%8E%A8%E5%AF%BC(C++11)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Yestin-王">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="来者可追，往之不谏">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++11新特性（2）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-01-30 23:12:19" itemprop="dateCreated datePublished" datetime="2023-01-30T23:12:19+08:00">2023-01-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-01-31 11:51:37" itemprop="dateModified" datetime="2023-01-31T11:51:37+08:00">2023-01-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C-11/" itemprop="url" rel="index"><span itemprop="name">C++11</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>​	本文主要讲述C++11标准中自动类型推导的功能，详述auto与decltype的使用</p>
+<span id="more"></span>
+
+<h2 id="1-auto"><a href="#1-auto" class="headerlink" title="1.auto"></a>1.auto</h2><h3 id="1-1-auto自动推导"><a href="#1-1-auto自动推导" class="headerlink" title="1.1 auto自动推导"></a>1.1 auto自动推导</h3><p>​		auto能自动推导变量的类型，但使用auto自动类型推导必须给变量初始化，不然无法推导。auto可以与指针、引用结合，也可以与const、volatile限定符配合使用。只有当变量是指针或者引用类型时，推导结果才会保留const，volatile关键字。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> animal = <span class="number">1024</span>;</span><br><span class="line"><span class="keyword">auto</span> cat = animal;<span class="comment">//cat推导为int类型, auto对应int</span></span><br><span class="line"><span class="keyword">auto</span> dog;<span class="comment">//dog未被初始化, 不能被自动推导 **语法错误**</span></span><br><span class="line"><span class="keyword">auto</span>* pet = &amp;animal;<span class="comment">//pet推导为int*, auto对应int</span></span><br><span class="line"><span class="type">const</span> <span class="keyword">auto</span> pig = animal;<span class="comment">//pig为const int类型，auto对应int</span></span><br><span class="line"><span class="keyword">auto</span> duck = pig;<span class="comment">//duck为int类型 **pig是const int，但duck没有指针或引用，所以不保留const**</span></span><br><span class="line"><span class="type">const</span> <span class="keyword">auto</span>&amp; horse = animal;<span class="comment">//horse为const int类型</span></span><br><span class="line"><span class="keyword">auto</span>&amp; mouse = animal;<span class="comment">//mouse为int&amp;类型</span></span><br></pre></td></tr></table></figure>
+
+<p>​		auto一般适用于替代迭代器的定义和泛型编程中。</p>
+<ul>
+<li>如果变量的定义太冗长，可以用auto替代</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vector&lt;<span class="type">int</span>&gt;val&#123; <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span> &#125;;</span><br><span class="line">	<span class="keyword">auto</span> it = val.<span class="built_in">begin</span>();<span class="comment">//vector&lt;int&gt;::iterator it,简化了很多</span></span><br><span class="line">	<span class="keyword">for</span> (;it != val.<span class="built_in">end</span>();it++)</span><br><span class="line">		cout &lt;&lt; *it;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在泛型编程中，如果要接收一个模板变量，是很难确定变量的类型，所以用什么数据类型接收就是一件非常头疼的事。解决这个问题，不仅要在模板声明中添加多个变量，在模板函数调用中还要多写多个参数。但如果有了auto关键字，就迎刃而解了。只需将不确定类型的变量用auto接收即可完成任务。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T</span>,<span class="keyword">class</span> <span class="title class_">P</span>&gt;</span><br><span class="line"><span class="function">T <span class="title">test1</span><span class="params">(T val)</span> </span>&#123;</span><br><span class="line">	P res = val;<span class="comment">//不仅要添一个class P，调用时也要多传一个参数。</span></span><br><span class="line">	<span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T</span>&gt;</span><br><span class="line"><span class="function">T <span class="title">test2</span><span class="params">(T val)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">auto</span> res = val;<span class="comment">//auto 定义res省去了很多工程</span></span><br><span class="line">	<span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	cout &lt;&lt; <span class="built_in">test1</span>&lt;<span class="type">int</span>,<span class="type">int</span>&gt;(<span class="number">2</span>);</span><br><span class="line">	cout &lt;&lt; <span class="built_in">test2</span>&lt;<span class="type">int</span>&gt;(<span class="number">2</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-auto的限制"><a href="#1-2-auto的限制" class="headerlink" title="1.2 auto的限制"></a>1.2 auto的限制</h3><ul>
+<li>不能在函数参数中使用</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">test</span><span class="params">(<span class="keyword">auto</span> a)</span></span>&#123; <span class="comment">//*错误*</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>不能用于初始化类的非静态成员变量</li>
+</ul>
+<p>​		又因为静态非常量成员不能在类内初始化，所以在类内auto只能修饰静态常量成员</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">test</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="keyword">auto</span> a = <span class="number">-1</span>;	<span class="comment">//	*错误*</span></span><br><span class="line">	<span class="type">static</span> <span class="keyword">auto</span> b = <span class="number">-1</span>;	<span class="comment">//	*错误* 静态非常量要在类外初始化</span></span><br><span class="line">	<span class="type">static</span> <span class="type">const</span> <span class="keyword">auto</span> c = <span class="string">&#x27;c&#x27;</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>不能定义数组</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> arr[]=&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;;</span><br><span class="line"><span class="keyword">auto</span> suss=arr;<span class="comment">//正确，arr1为int*类型</span></span><br><span class="line"><span class="keyword">auto</span> err1[]=arr;<span class="comment">// *错误*</span></span><br><span class="line"><span class="keyword">auto</span> err2[]=&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;;<span class="comment">// *错误*</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>不能当作模板参数</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function">T <span class="title">test</span><span class="params">(T val)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> val;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	cout &lt;&lt; <span class="built_in">test</span>&lt;<span class="type">int</span>&gt;(<span class="number">2</span>);<span class="comment">//正确</span></span><br><span class="line">	cout &lt;&lt; <span class="built_in">test</span>&lt;<span class="keyword">auto</span>&gt;(<span class="number">2</span>);<span class="comment">// *错误*</span></span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="2-decltype"><a href="#2-decltype" class="headerlink" title="2.decltype"></a>2.decltype</h2><p><strong>语法格式</strong>：decltype(表达式)</p>
+<p>在变量类型不确定又不想声明的情况下可以用到decltype。decltype对变量类型的推导是在编译期完成的，只用于表达式类型的推导而不计算表达式的值。</p>
+<p><strong>推导规则</strong></p>
+<ul>
+<li><p>表达式为变量，推导得到的类型与变量类型一致</p>
+</li>
+<li><p>表达式为函数，推导得出的类型与函数返回值一致</p>
+</li>
+</ul>
+<p>​		如果const修饰的是纯右值（纯数据）时，const不会保留，比如const int类型会推导成int。</p>
+<ul>
+<li>左值表达式或者被括号修饰，推导结果为表达式类型的引用，如果有const、volatile是不能省略的。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//括号修饰</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> const_int = <span class="number">10</span>;</span><br><span class="line"><span class="type">int</span> normal_int = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">decltype</span>((const_int)) v1= <span class="number">3</span>;<span class="comment">//const int&amp; v1</span></span><br><span class="line"><span class="keyword">decltype</span>((normal_int)) v2= normal_int;<span class="comment">//int&amp; v2 </span></span><br><span class="line"><span class="comment">//表达式修饰</span></span><br><span class="line"><span class="type">int</span> m = <span class="number">1</span>, n = <span class="number">2</span>;</span><br><span class="line"><span class="keyword">decltype</span>(m+n) v3 = <span class="number">3</span>;<span class="comment">//int v3  m+n是右值</span></span><br><span class="line"><span class="keyword">decltype</span>(n=m+n) v4 = normal_int;<span class="comment">//int&amp; v4	左值表达式推导结果为引用</span></span><br></pre></td></tr></table></figure>
+
+<p>decltype同auto一样，广泛应用于泛型编程中。比如说，写了个类模板，里面用到了容器，想用迭代器遍历容器中的数据，迭代器如何定义？如果用 T::iterator it; 之类的语法是错误的，因为编译器无法识别。最好的方案就是用decltype类型推导。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T</span>&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Container</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">func</span><span class="params">(T&amp; c)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (it = c.<span class="built_in">begin</span>(); it != c.<span class="built_in">end</span>(); ++it)</span><br><span class="line">        &#123;</span><br><span class="line">            cout &lt;&lt; *it &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        cout &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="comment">//T::iterator it;// *错误* 这里不能确定迭代器类型</span></span><br><span class="line">    <span class="keyword">decltype</span>(<span class="built_in">T</span>().<span class="built_in">begin</span>()) it;</span><br><span class="line">&#125;;</span><br><span class="line">   </span><br></pre></td></tr></table></figure>
+
+<p>总结一下，auto的使用必须初始化，decltype可以不用初始化。</p>
+<h2 id="3-融合！返回值类型后置"><a href="#3-融合！返回值类型后置" class="headerlink" title="3.融合！返回值类型后置"></a>3.融合！返回值类型后置</h2><p>上述文章阐述了auto和decltype的用法，此处讲解一个两者结合的使用方法。</p>
+<p>在设计模板函数或者模板类的时候，难免会出现模板变量类型不一样的情况。加入需要两个数值类型的加和运算的模板函数，返回两者的加和。我们知道数值类型有很多，short，int，float，double，long等等，甚至字符变量也能掺和掺和。不同的组合的返回类型也是不同的，但在设计模板函数时在一开头就要给出返回类型，在没有确定参数类型时给出返回类型似乎是一件不可能的事情，C++14中编译器才可以自己推导任何函数的返回类型，如果C++11的编译器用auto做函数返回类型是错误的，因为没有初始化。所以就想到了decltype，然而decltype的使用需要知道传递的参数，如果这么写</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">decltype</span>(t+u) <span class="built_in">add</span>(T t, U u)</span><br></pre></td></tr></table></figure>
+
+<p>肯定是错误的，因为decltype中的t和u还没给出，编译器无法识别直接报错。如果能让返回类型放在参数列表之后定义就好了。所以便有了下述的代码思路</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">T</span>,<span class="keyword">class</span> <span class="title class_">U</span>&gt;</span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">add0</span><span class="params">(T t, U u)</span> -&gt; <span class="title">decltype</span><span class="params">(t+u)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> t + u;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这就是返回值类型后置。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"># C++</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/01/30/Linux%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-auto"><span class="nav-number">1.</span> <span class="nav-text">1.auto</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-auto%E8%87%AA%E5%8A%A8%E6%8E%A8%E5%AF%BC"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 auto自动推导</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-auto%E7%9A%84%E9%99%90%E5%88%B6"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 auto的限制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-decltype"><span class="nav-number">2.</span> <span class="nav-text">2.decltype</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E8%9E%8D%E5%90%88%EF%BC%81%E8%BF%94%E5%9B%9E%E5%80%BC%E7%B1%BB%E5%9E%8B%E5%90%8E%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">3.融合！返回值类型后置</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Yestin-王</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Yestin-wang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Yestin-wang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yestin-王</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">39k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:12</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
