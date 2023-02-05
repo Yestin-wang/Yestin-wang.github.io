@@ -405,7 +405,7 @@
 </blockquote>
 <h2 id="3-内建函数对象"><a href="#3-内建函数对象" class="headerlink" title="3 内建函数对象"></a>3 内建函数对象</h2><p>​	STL内建了一些函数对象，整体分为关系仿函数、逻辑仿函数和算术仿函数三类。这些仿函数所产生的对象用法和一般函数完全相同，但使用时需要引入头文件</p>
 <blockquote>
-<p>#include &lt;function&gt;</p>
+<p>#include &lt;functional&gt;</p>
 </blockquote>
 <h3 id="3-1-关系仿函数"><a href="#3-1-关系仿函数" class="headerlink" title="3.1 关系仿函数"></a>3.1 关系仿函数</h3><blockquote>
 <p>template<class T>  bool  equal_to<T>  &#x2F;&#x2F;等于</p>
@@ -1020,53 +1020,5 @@
       <tags>
         <tag>C++</tag>
       </tags>
-  </entry>
-  <entry>
-    <title></title>
-    <url>/2023/02/05/c++11(3)/</url>
-    <content><![CDATA[<h2 id="using"><a href="#using" class="headerlink" title="using"></a>using</h2><h3 id="引子：typedef-和-函数指针"><a href="#引子：typedef-和-函数指针" class="headerlink" title="引子：typedef 和 函数指针"></a>引子：typedef 和 函数指针</h3><ul>
-<li>函数指针</li>
-</ul>
-<p>​		顾名思义，函数指针就是指向函数地址的变量。函数指针的使用往往会和指针函数混淆。在C++规则中，括号优先级是大于*优先级的，所以表达式**关键字(*函数名)**表达就是一个指针类型。下面拿int类型设计一个指针函数和一个函数指针加以区分。</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span>* <span class="title">func1</span><span class="params">(<span class="type">int</span> val)</span></span>;<span class="comment">//指针函数</span></span><br><span class="line"><span class="built_in">int</span>(*func2) (<span class="type">int</span> val);<span class="comment">//函数指针</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>typedef</p>
-<pre><code> **typedef**用于给变量起别名，增加代码的可读性。最基本的用法就如以下代码所示。
-</code></pre>
-</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="type">int</span> type_int; <span class="comment">//type_int相当于int的别名</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="type">int</span> *type_int_p;<span class="comment">//type_int_p相当于int*的别名</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> &#123; type_int x; &#125; type_struct;<span class="comment">//type_struct相当于该结构体的别名</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="type">int</span> type_array[] ;<span class="comment">//type_array相当于整型数组的别名</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	type_int a = <span class="number">2</span>;</span><br><span class="line">	type_int_p p = &amp;a;</span><br><span class="line">	cout&lt;&lt;<span class="string">&quot;a= &quot;</span> &lt;&lt; a &lt;&lt; endl;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;p= &quot;</span> &lt;&lt; p;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>运行结果</strong></p>
-<blockquote>
-<p>a&#x3D; 2<br>p&#x3D; 0000006D208FF764</p>
-</blockquote>
-<p>​		另外，定义新类型时添加括号并不是语法错误，如</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="built_in">type_array</span>(arr) = &#123; <span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span> &#125;;<span class="comment">//定义了一个数组，数组内容为&#123;2,3,4&#125;</span></span><br></pre></td></tr></table></figure>
-
-<p>​		接下来看看这种形式</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="type">int</span> <span class="title">nickname</span><span class="params">(<span class="type">int</span>,string)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<p>​		它的作用相当于给返回类型为int，含一个int类型和一个string类型的参数的函数起了别名nickname。下面的一段程序将演示它的使用方式。</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="type">int</span> <span class="title">nickname</span><span class="params">(<span class="type">int</span>,string)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">int</span> <span class="params">(*_nickname)</span><span class="params">(<span class="type">int</span>,string)</span></span>;</span><br><span class="line"><span class="built_in">nickname</span>(CallMeRealName);<span class="comment">//相当于函数定义 int CallMeRealName(int id, string name);</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	_nickname func1;</span><br><span class="line">	func1 = CallMeRealName;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;id 为&quot;</span> &lt;&lt; <span class="built_in">func1</span>(<span class="number">702</span>, <span class="string">&quot;詹姆斯&quot;</span>);</span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">CallMeRealName</span><span class="params">(<span class="type">int</span> id, string name)</span> </span>&#123;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;我叫&quot;</span> &lt;&lt; name &lt;&lt; <span class="string">&quot; ！&quot;</span> &lt;&lt; endl;</span><br><span class="line">	<span class="keyword">return</span> id;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>​		为了可读性，更多的用typedef给函数指针起别名，这样在编程过程中能将原来的函数名修改成一个应景的名字，增加可读性。而对普通函数起别名多用于在函数定义的过程中。</p>
-]]></content>
-  </entry>
-  <entry>
-    <title></title>
-    <url>/2023/02/01/%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95%201/</url>
-    <content><![CDATA[<h2 id="贪心"><a href="#贪心" class="headerlink" title="贪心"></a>贪心</h2><h3 id="455-分发饼干"><a href="#455-分发饼干" class="headerlink" title="455 分发饼干"></a>455 分发饼干</h3><p>假设你是一位很棒的家长，想要给你的孩子们一些小饼干。但是，每个孩子最多只能给一块饼干。</p>
-<p>对每个孩子 <code>i</code>，都有一个胃口值 <code>g[i]</code>，这是能让孩子们满足胃口的饼干的最小尺寸；并且每块饼干 <code>j</code>，都有一个尺寸 <code>s[j]</code> 。如果 <code>s[j] &gt;= g[i]</code>，我们可以将这个饼干 <code>j</code> 分配给孩子 <code>i</code> ，这个孩子会得到满足。你的目标是尽可能满足越多数量的孩子，并输出这个最大数值。</p>
-<p><strong>示例 1:</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入: g = [1,2,3], s = [1,1]</span><br><span class="line">输出: 1</span><br><span class="line">解释: </span><br><span class="line">你有三个孩子和两块小饼干，3个孩子的胃口值分别是：1,2,3。</span><br><span class="line">虽然你有两块小饼干，由于他们的尺寸都是1，你只能让胃口值是1的孩子满足。</span><br><span class="line">所以你应该输出1。</span><br></pre></td></tr></table></figure>
-
-<p><strong>示例 2:</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入: g = [1,2], s = [1,2,3]</span><br><span class="line">输出: 2</span><br><span class="line">解释: </span><br><span class="line">你有两个孩子和三块小饼干，2个孩子的胃口值分别是1,2。</span><br><span class="line">你拥有的饼干数量和尺寸都足以让所有孩子满足。</span><br><span class="line">所以你应该输出2.</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">findContentChildren</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; g, vector&lt;<span class="type">int</span>&gt;&amp; s)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> cnt=<span class="number">0</span>;<span class="comment">//记录能得到饼干的孩子数</span></span><br><span class="line">        <span class="comment">//将孩子按胃口大小，饼干按尺寸大小从小到大排列</span></span><br><span class="line">        <span class="built_in">sort</span>(g.<span class="built_in">begin</span>(),g.<span class="built_in">end</span>());</span><br><span class="line">        <span class="built_in">sort</span>(s.<span class="built_in">begin</span>(),s.<span class="built_in">end</span>());</span><br><span class="line">        <span class="comment">//两个迭代器分别指向孩子和饼干容器的起点</span></span><br><span class="line">        vector&lt;<span class="type">int</span>&gt;::iterator g_it=g.<span class="built_in">begin</span>();</span><br><span class="line">        vector&lt;<span class="type">int</span>&gt;::iterator s_it=s.<span class="built_in">begin</span>();</span><br><span class="line">        <span class="keyword">for</span>(;g_it!=g.<span class="built_in">end</span>()&amp;&amp;s_it!=s.<span class="built_in">end</span>();s_it++)&#123;<span class="comment">//孩子遍历完或者饼干遍历完结束循环</span></span><br><span class="line">        <span class="comment">//如果饼干能满足孩子胃口，两个迭代器向后移动，cnt自增1</span></span><br><span class="line">        <span class="keyword">if</span>(*g_it&lt;=*s_it)&#123;</span><br><span class="line">            cnt++;</span><br><span class="line">            g_it++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//不能满足孩子胃口，找下一块更大的饼干</span></span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">           <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">        <span class="keyword">return</span> cnt;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-]]></content>
   </entry>
 </search>
