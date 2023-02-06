@@ -1120,9 +1120,12 @@
       </tags>
   </entry>
   <entry>
-    <title></title>
+    <title>C++11新特性(3)</title>
     <url>/2023/02/06/c++11(3)/</url>
-    <content><![CDATA[<h2 id="using"><a href="#using" class="headerlink" title="using"></a>using</h2><h3 id="引子：typedef-和-函数指针"><a href="#引子：typedef-和-函数指针" class="headerlink" title="引子：typedef 和 函数指针"></a>引子：typedef 和 函数指针</h3><ul>
+    <content><![CDATA[<p> 本文讲述C++11特性中的using的使用，委托构造函数和继承构造函数，以及初始化列表四方面的内容。</p>
+<span id="more"></span>
+
+<h2 id="using"><a href="#using" class="headerlink" title="using"></a>using</h2><h3 id="引子：typedef-和-函数指针"><a href="#引子：typedef-和-函数指针" class="headerlink" title="引子：typedef 和 函数指针"></a>引子：typedef 和 函数指针</h3><ul>
 <li>函数指针</li>
 </ul>
 <p>​		顾名思义，函数指针就是指向函数地址的变量。函数指针的使用往往会和指针函数混淆。在C++规则中，括号优先级是大于*优先级的，所以表达式**关键字(*函数名)**表达就是一个指针类型。下面拿int类型设计一个指针函数和一个函数指针加以区分。</p>
@@ -1245,5 +1248,12 @@
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">test</span><span class="params">(initializer_list&lt;<span class="type">int</span>&gt; list)</span> </span>&#123;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;ok&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="built_in">test</span>(&#123; <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span> &#125;);</span><br></pre></td></tr></table></figure>
 
 ]]></content>
+      <categories>
+        <category>C++学习笔记</category>
+        <category>C++11</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+      </tags>
   </entry>
 </search>
