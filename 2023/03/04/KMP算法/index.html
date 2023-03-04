@@ -20,20 +20,21 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"manual","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="最近发现对c++的二维数组的传参产生遗忘，写此文来回顾下二维数组作为函数参数形式的传递。">
+  <meta name="description" content="求next数组 12345678910111213141516171819202122232425int* getNext(string str) &amp;#123;	int str_len &#x3D; str.size();	int* next &#x3D; new int[str_len];&#x2F;&#x2F;为申请next数组申请内存空间	next[0] &#x3D; 0;	next[1] &#x3D; 0;	int prefix &#x3D; 0;	int">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C++中二维数组作为函数的参数">
-<meta property="og:url" content="http://example.com/2022/01/15/C++%E4%B8%AD%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84%E4%BD%9C%E4%B8%BA%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0/index.html">
+<meta property="og:title" content="KMP算法">
+<meta property="og:url" content="http://example.com/2023/03/04/KMP%E7%AE%97%E6%B3%95/index.html">
 <meta property="og:site_name" content="来者可追，往之不谏">
-<meta property="og:description" content="最近发现对c++的二维数组的传参产生遗忘，写此文来回顾下二维数组作为函数参数形式的传递。">
+<meta property="og:description" content="求next数组 12345678910111213141516171819202122232425int* getNext(string str) &amp;#123;	int str_len &#x3D; str.size();	int* next &#x3D; new int[str_len];&#x2F;&#x2F;为申请next数组申请内存空间	next[0] &#x3D; 0;	next[1] &#x3D; 0;	int prefix &#x3D; 0;	int">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-01-14T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-02-06T04:41:48.453Z">
+<meta property="article:published_time" content="2023-03-04T08:41:45.921Z">
+<meta property="article:modified_time" content="2023-03-04T08:42:51.623Z">
 <meta property="article:author" content="Yestin-王">
 <meta property="article:tag" content="C++">
+<meta property="article:tag" content="字符串">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/2022/01/15/C++%E4%B8%AD%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84%E4%BD%9C%E4%B8%BA%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0/">
+<link rel="canonical" href="http://example.com/2023/03/04/KMP%E7%AE%97%E6%B3%95/">
 
 
 <script id="page-configurations">
@@ -46,7 +47,7 @@
   };
 </script>
 
-  <title>C++中二维数组作为函数的参数 | 来者可追，往之不谏</title>
+  <title>KMP算法 | 来者可追，往之不谏</title>
   
 
 
@@ -162,7 +163,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/15/C++%E4%B8%AD%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84%E4%BD%9C%E4%B8%BA%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/03/04/KMP%E7%AE%97%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -175,7 +176,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          C++中二维数组作为函数的参数
+          KMP算法
         </h1>
 
         <div class="post-meta">
@@ -184,27 +185,17 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2022-01-15 00:00:00" itemprop="dateCreated datePublished" datetime="2022-01-15T00:00:00+08:00">2022-01-15</time>
+              <time title="创建时间：2023-03-04 16:41:45 / 修改时间：16:42:51" itemprop="dateCreated datePublished" datetime="2023-03-04T16:41:45+08:00">2023-03-04</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-02-06 12:41:48" itemprop="dateModified" datetime="2023-02-06T12:41:48+08:00">2023-02-06</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">C++学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/C-%E6%8B%BE%E9%81%97/" itemprop="url" rel="index"><span itemprop="name">C++拾遗</span></a>
+                  <a href="/categories/%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E6%80%9D%E6%83%B3/" itemprop="url" rel="index"><span itemprop="name">基础数据结构与算法思想</span></a>
                 </span>
             </span>
 
@@ -214,7 +205,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>898</span>
+              <span>848</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -233,27 +224,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>最近发现对c++的二维数组的传参产生遗忘，写此文来回顾下二维数组作为函数参数形式的传递。</p>
-<span id="more"></span>
-
-<h3 id="固定维度"><a href="#固定维度" class="headerlink" title="固定维度"></a>固定维度</h3><p>先定义一个三行三列数组</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> arr[<span class="number">3</span>][<span class="number">3</span>] = &#123; &#123;<span class="number">1</span>,<span class="number">2</span>&#125;,&#123;<span class="number">2</span>,<span class="number">3</span>&#125;,&#123;<span class="number">2</span>,<span class="number">3</span>&#125; &#125;;</span><br></pre></td></tr></table></figure>
-
-<p>二维数组作为函数的参数，总体只有以下几种写法。函数的参数声明中必须指出数组的列数，与数组的行数没有太大的关系。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">test01</span><span class="params">(<span class="type">int</span> (*array)[<span class="number">3</span>])</span> </span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;(*array)[3]传参成功&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test02</span><span class="params">(<span class="type">int</span> array[<span class="number">3</span>][<span class="number">3</span>])</span> </span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;array[3][3]传参成功&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test03</span><span class="params">(<span class="type">int</span> array[][<span class="number">3</span>])</span> </span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;array[][3]传参成功&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>以下几种方式是不合法的</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">test04</span><span class="params">(<span class="type">int</span> array[][])</span></span>&#123;&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test05</span><span class="params">(<span class="type">int</span> array[<span class="number">3</span>][])</span></span>&#123;&#125;</span><br></pre></td></tr></table></figure>
-
-<p>注意，这种写法是相当于声明了一个数组，该数组包含着3个指向整型对象的指针</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">test06</span><span class="params">(<span class="type">int</span> *arr[<span class="number">3</span>])</span></span>&#123;&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="动态二维数组"><a href="#动态二维数组" class="headerlink" title="动态二维数组"></a>动态二维数组</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">vla</span><span class="params">(<span class="type">int</span> m,<span class="type">int</span> n,<span class="type">int</span> arr[m][n])</span></span>&#123;&#125;		<span class="comment">//正确</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">vla</span><span class="params">(<span class="type">int</span> arr[m][n]，<span class="type">int</span> m,<span class="type">int</span> n)</span></span>&#123;&#125;	   <span class="comment">//错误</span></span><br></pre></td></tr></table></figure>
-
-<p>很奇怪，VS 2022社区版的编译器竟然不支持VLA。</p>
-<h3 id="vector的形式使用二维数组"><a href="#vector的形式使用二维数组" class="headerlink" title="vector的形式使用二维数组"></a>vector的形式使用二维数组</h3><p>对于不支持VLA的编译器完全可以用vector替代数组形式。如建立一个n行n列的布尔型二维数组变量</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> n = <span class="number">3</span>;</span><br><span class="line">vector &lt; vector&lt;<span class="type">bool</span>&gt;&gt; <span class="built_in">putQ</span>(n,<span class="built_in">vector</span>&lt;<span class="type">bool</span>&gt;(n,<span class="literal">true</span>));<span class="comment">//设置初值为真</span></span><br></pre></td></tr></table></figure>
-
+        <p>求next数组</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span>* <span class="title">getNext</span><span class="params">(string str)</span> </span>&#123;</span><br><span class="line">	<span class="type">int</span> str_len = str.<span class="built_in">size</span>();</span><br><span class="line">	<span class="type">int</span>* next = <span class="keyword">new</span> <span class="type">int</span>[str_len];<span class="comment">//为申请next数组申请内存空间</span></span><br><span class="line">	next[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">	next[<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> prefix = <span class="number">0</span>;</span><br><span class="line">	<span class="type">int</span> index = <span class="number">2</span>;</span><br><span class="line">	<span class="comment">//比较前缀与后缀</span></span><br><span class="line">	<span class="keyword">while</span>(index&lt;str_len) &#123;</span><br><span class="line">		<span class="keyword">if</span> (str[index<span class="number">-1</span>] == str[prefix]) &#123;</span><br><span class="line">			prefix++;</span><br><span class="line">			next[index] = prefix;</span><br><span class="line">			index++;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> &#123;</span><br><span class="line">			<span class="keyword">if</span> (prefix == <span class="number">0</span>) &#123;</span><br><span class="line">				next[index] = prefix;</span><br><span class="line">				index++;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">				prefix = next[prefix<span class="number">-1</span>];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> next;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>kmp算法</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">KMP</span><span class="params">(string pattern, string str)</span> </span>&#123;</span><br><span class="line">	<span class="comment">//得到next数组</span></span><br><span class="line">	<span class="type">int</span>* next = <span class="built_in">getNext</span>(pattern);</span><br><span class="line">	<span class="type">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>;<span class="comment">//两个索引分别代表主串和模式串的下标</span></span><br><span class="line">	<span class="comment">//主串与模式进行比较</span></span><br><span class="line">	<span class="keyword">while</span> (i &lt; str.<span class="built_in">size</span>()) &#123;</span><br><span class="line">		<span class="comment">//字符匹配则主串模式串索引均后移</span></span><br><span class="line">		<span class="keyword">if</span> (str[i] == pattern[j]||j==<span class="number">0</span>) &#123;</span><br><span class="line">			i++;j++;</span><br><span class="line">			<span class="keyword">if</span> (j &gt;= pattern.<span class="built_in">size</span>()) &#123;</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//不匹配，主串索引不变，模式串索引根据next数组作相应的改变</span></span><br><span class="line">		<span class="keyword">else</span> &#123;</span><br><span class="line"></span><br><span class="line">			j = next[j];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">delete</span> [] next;</span><br><span class="line">	<span class="keyword">if</span> (j == pattern.<span class="built_in">size</span>())</span><br><span class="line">		<span class="keyword">return</span> i - pattern.<span class="built_in">size</span>();</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
     </div>
 
@@ -264,6 +238,7 @@
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/C/" rel="tag"># C++</a>
+              <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="tag"># 字符串</a>
           </div>
 
         
@@ -271,11 +246,11 @@
 
         
     <div class="post-nav">
-      <div class="post-nav-item"></div>
       <div class="post-nav-item">
-    <a href="/2022/01/18/C++%E6%8B%BE%E9%81%97%E4%B9%8B%E5%87%BD%E6%95%B0%E5%AF%B9%E8%B1%A1/" rel="next" title="C++函数对象">
-      C++函数对象 <i class="fa fa-chevron-right"></i>
+    <a href="/2023/03/04/%E5%8D%81%E5%A4%A7%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" rel="prev" title="十大排序算法">
+      <i class="fa fa-chevron-left"></i> 十大排序算法
     </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -334,7 +309,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BA%E5%AE%9A%E7%BB%B4%E5%BA%A6"><span class="nav-number">1.</span> <span class="nav-text">固定维度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84"><span class="nav-number">2.</span> <span class="nav-text">动态二维数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vector%E7%9A%84%E5%BD%A2%E5%BC%8F%E4%BD%BF%E7%94%A8%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84"><span class="nav-number">3.</span> <span class="nav-text">vector的形式使用二维数组</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
