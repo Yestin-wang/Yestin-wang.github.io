@@ -28,7 +28,7 @@
 <meta property="og:description" content="标准模板库 STL（Standard Template Library）是C++标准库的一部分，是借助模板把常用的数据结构及算法封装在其中。掌握STL对于刷算法题有很大的帮助。写此文来记录总结下STL中的常用函数">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-02-11T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-02-09T15:22:46.735Z">
+<meta property="article:modified_time" content="2023-02-28T09:24:20.513Z">
 <meta property="article:author" content="Yestin-王">
 <meta property="article:tag" content="C++">
 <meta name="twitter:card" content="summary">
@@ -192,7 +192,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-02-09 23:22:46" itemprop="dateModified" datetime="2023-02-09T23:22:46+08:00">2023-02-09</time>
+                <time title="修改时间：2023-02-28 17:24:20" itemprop="dateModified" datetime="2023-02-28T17:24:20+08:00">2023-02-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -201,10 +201,6 @@
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/C-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">C++学习笔记</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/C-%E6%8B%BE%E9%81%97/" itemprop="url" rel="index"><span itemprop="name">C++拾遗</span></a>
                 </span>
             </span>
 
@@ -237,17 +233,17 @@
 <span id="more"></span>
 
 <h1 id="常用遍历算法"><a href="#常用遍历算法" class="headerlink" title="常用遍历算法"></a>常用遍历算法</h1><p>以下算法都在头文件&lt;algorithm&gt;中</p>
-<h2 id="for-each-实现遍历容器"><a href="#for-each-实现遍历容器" class="headerlink" title="for_each  实现遍历容器"></a><strong>for_each</strong>  实现遍历容器</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">for_each(iterator beg, iterator end, _func);\\beg 开始迭代器	end 结束迭代器  _func 函数或者函数对象</span><br></pre></td></tr></table></figure>
+<h2 id="for-each-实现遍历容器"><a href="#for-each-实现遍历容器" class="headerlink" title="for_each  实现遍历容器"></a><strong>for_each</strong>  实现遍历容器</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">for_each(iterator beg, iterator end, _func);<span class="comment">//beg 开始迭代器	end 结束迭代器  _func 函数或者函数对象</span></span><br></pre></td></tr></table></figure>
 
 <p> _func传入普通函数</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">vecPrint</span><span class="params">(<span class="type">int</span> val)</span> </span>&#123;			\\定义普通函数</span><br><span class="line">	cout &lt;&lt; val &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	vector&lt;<span class="type">int</span>&gt;v = &#123; <span class="number">2</span>,<span class="number">3</span>,<span class="number">43</span>,<span class="number">324</span>,<span class="number">234</span>,<span class="number">123</span>,<span class="number">2345</span>,<span class="number">435</span>,<span class="number">34</span> &#125;;</span><br><span class="line">	for_each(v.<span class="built_in">begin</span>(), v.<span class="built_in">end</span>(), vecPrint);\\遍历输出v容器中的元素</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">vecPrint</span><span class="params">(<span class="type">int</span> val)</span> </span>&#123;			<span class="comment">//定义普通函数</span></span><br><span class="line">	cout &lt;&lt; val &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	vector&lt;<span class="type">int</span>&gt;v = &#123; <span class="number">2</span>,<span class="number">3</span>,<span class="number">43</span>,<span class="number">324</span>,<span class="number">234</span>,<span class="number">123</span>,<span class="number">2345</span>,<span class="number">435</span>,<span class="number">34</span> &#125;;</span><br><span class="line">	for_each(v.<span class="built_in">begin</span>(), v.<span class="built_in">end</span>(), vecPrint);<span class="comment">//遍历输出v容器中的元素</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p><strong>运行结果</strong></p>
 <blockquote>
 <p>​	2 3 43 324 234 123 2345 435 34</p>
 </blockquote>
 <p> _func传入仿函数</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">printFunctor</span>&#123;		\\创造仿函数,打印数据</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="type">int</span> val)</span> </span>&#123;</span><br><span class="line">		cout &lt;&lt; val &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	vector&lt;<span class="type">int</span>&gt;v = &#123; <span class="number">2</span>,<span class="number">3</span>,<span class="number">43</span>,<span class="number">324</span>,<span class="number">234</span>,<span class="number">123</span>,<span class="number">2345</span>,<span class="number">435</span>,<span class="number">34</span> &#125;;</span><br><span class="line">	for_each(v.<span class="built_in">begin</span>(), v.<span class="built_in">end</span>(), <span class="built_in">printFunctor</span>());\\遍历输出v容器中的元素</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">printFunctor</span>&#123;		<span class="comment">//创造仿函数,打印数据</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="type">int</span> val)</span> </span>&#123;</span><br><span class="line">		cout &lt;&lt; val &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	vector&lt;<span class="type">int</span>&gt;v = &#123; <span class="number">2</span>,<span class="number">3</span>,<span class="number">43</span>,<span class="number">324</span>,<span class="number">234</span>,<span class="number">123</span>,<span class="number">2345</span>,<span class="number">435</span>,<span class="number">34</span> &#125;;</span><br><span class="line">	for_each(v.<span class="built_in">begin</span>(), v.<span class="built_in">end</span>(), <span class="built_in">printFunctor</span>());<span class="comment">//遍历输出v容器中的元素</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p><strong>运行结果</strong></p>
 <blockquote>
@@ -255,7 +251,7 @@
 </blockquote>
 <!-- more -->
 
-<h2 id="transform搬运容器到另一个容器"><a href="#transform搬运容器到另一个容器" class="headerlink" title="transform搬运容器到另一个容器"></a>transform搬运容器到另一个容器</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">transform(iterator beg1, iterator end1, iterator beg2, _func);\\beg1 源容器开始迭代器	end1 源容器结束迭代器 beg2 目标容器开始迭代器 _func 函数或者函数对象</span><br></pre></td></tr></table></figure>
+<h2 id="transform搬运容器到另一个容器"><a href="#transform搬运容器到另一个容器" class="headerlink" title="transform搬运容器到另一个容器"></a>transform搬运容器到另一个容器</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">transform(iterator beg1, iterator end1, iterator beg2, _func);//beg1 源容器开始迭代器	end1 源容器结束迭代器 beg2 目标容器开始迭代器 _func 函数或者函数对象</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Trans</span> &#123;<span class="comment">//仿函数实现将数据元素+10操作</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="type">int</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="type">int</span> val)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> val+<span class="number">10</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	vector&lt;<span class="type">int</span>&gt;v = &#123; <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span> &#125;;</span><br><span class="line">	vector&lt;<span class="type">int</span>&gt;vTarget;</span><br><span class="line">	vTarget.<span class="built_in">resize</span>(v.<span class="built_in">size</span>());<span class="comment">//为vTraget容器开辟与v容器等大的空间，否则程序运行会被中止</span></span><br><span class="line">	<span class="built_in">transform</span>(v.<span class="built_in">begin</span>(), v.<span class="built_in">end</span>(),vTarget.<span class="built_in">begin</span>(), <span class="built_in">Trans</span>());<span class="comment">//将v容器中的数据+10后搬运到vTarget中</span></span><br><span class="line">	for_each(vTarget.<span class="built_in">begin</span>(), vTarget.<span class="built_in">end</span>(), <span class="built_in">printFunctor</span>());<span class="comment">//打印vTarget容器</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -490,7 +486,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-count">11</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -503,7 +499,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -545,13 +541,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">83k</span>
+    <span title="站点总字数">78k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">2:32</span>
+    <span title="站点阅读时长">2:22</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
