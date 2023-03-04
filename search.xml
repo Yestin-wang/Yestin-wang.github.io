@@ -1444,8 +1444,8 @@
 <h3 id="冒泡排序"><a class="header-anchor" href="#冒泡排序">¶</a>冒泡排序</h3>
 <ul>
 <li>稳定</li>
-<li>时间复杂度最好为<em><strong>O(n)</strong></em>,最差为<em><strong>O(n<sup>2</sup>)</strong></em>,平均<em><strong>O(n<sup>2</sup>)</strong></em></li>
-<li>空间复杂度<em><strong>O(1)</strong></em></li>
+<li>时间复杂度最好为 <em><strong>O(n)</strong></em> ,最差为 <em><strong>O(n<sup>2</sup>)</strong></em> ,平均 <em><strong>O(n<sup>2</sup>)</strong></em></li>
+<li>空间复杂度 <em><strong>O(1)</strong></em></li>
 <li>原地算法</li>
 </ul>
 <p><strong>思路</strong></p>
@@ -1476,8 +1476,8 @@
 <h3 id="简单插入排序"><a class="header-anchor" href="#简单插入排序">¶</a>简单插入排序</h3>
 <ul>
 <li>稳定</li>
-<li><em><strong>O(n<sup>2</sup>)<em><strong>的最坏和平均时间复杂度，最好情况</strong></em>O(n)</strong></em></li>
-<li>***O(1)***的空间复杂度</li>
+<li><em><strong>O(n<sup>2</sup>)</strong></em> 的最坏和平均时间复杂度，最好情况 <em><strong>O(n)</strong></em></li>
+<li><em><strong>O(1)</strong></em> 的空间复杂度</li>
 <li>原地算法</li>
 </ul>
 <p><strong>思路</strong></p>
@@ -1515,7 +1515,7 @@
 <h3 id="简单选择排序"><a class="header-anchor" href="#简单选择排序">¶</a>简单选择排序</h3>
 <ul>
 <li>不稳定</li>
-<li>时间复杂度最好最坏平均都为***(n<sup>2</sup>)***</li>
+<li>时间复杂度最好最坏平均都为 <em><strong>(n<sup>2</sup>)</strong></em></li>
 <li>空间复杂度<em><strong>O(1)</strong></em></li>
 <li>原地算法</li>
 <li>每一趟<code>n-i+1(i=1,2,…,n-1)</code>个记录中选取值最小的索引作为有序序列的第 i 个索引。</li>
@@ -1564,7 +1564,7 @@
 <h2 id="归并排序"><a class="header-anchor" href="#归并排序">¶</a>归并排序</h2>
 <ul>
 <li>稳定</li>
-<li>时间复杂度平均最坏最好均为<strong><em>O(n</em>logn)</strong>*</li>
+<li>时间复杂度平均最坏最好均为<em><strong>O(n*logn)</strong></em></li>
 <li>空间复杂度<em><strong>O(n)</strong></em></li>
 <li>非原地算法，占用额外空间</li>
 </ul>
