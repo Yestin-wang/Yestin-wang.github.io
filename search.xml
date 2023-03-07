@@ -692,25 +692,40 @@
   <entry>
     <title>0-1背包问题</title>
     <url>/2023/01/28/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92-%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p> 本文记录学习0-1背包问题时的总结，详细介绍了对背包问题的暴力解法，二维数组的思路以及滚动数组思路的理解，并给出详细注释与代码。</p>
+    <content><![CDATA[<p>本文记录学习0-1背包问题时的总结，详细介绍了对背包问题的暴力解法，二维数组的思路以及滚动数组思路的理解，并给出详细注释与代码。</p>
 <span id="more"></span>
-
-<h3 id="背包问题的暴力解法"><a href="#背包问题的暴力解法" class="headerlink" title="背包问题的暴力解法"></a>背包问题的暴力解法</h3><p>​		待选物品无非是有两种状态，选与不选。背包问题求解最大价值量的问题，可以转换成遍历所有物品的各种组合，将价值与重量的总和记录在一个变量中。重量作为遍历条件，价值总量作为输出结果的一个选择。问题就回归到了回溯算法中的组合问题。力扣中39，40，216题是组合问题的经典问题，借照这些题的解法思想，背包问题的暴力解法可如下所示:</p>
+<h3 id="背包问题的暴力解法"><a class="header-anchor" href="#背包问题的暴力解法">¶</a>背包问题的暴力解法</h3>
+<p>​		待选物品无非是有两种状态，选与不选。背包问题求解最大价值量的问题，可以转换成遍历所有物品的各种组合，将价值与重量的总和记录在一个变量中。重量作为遍历条件，价值总量作为输出结果的一个选择。问题就回归到了回溯算法中的组合问题。力扣中39，40，216题是组合问题的经典问题，借照这些题的解法思想，背包问题的暴力解法可如下所示:</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Knapsack</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="type">int</span> pushed_weight = <span class="number">0</span>;<span class="comment">//已经装入的重量</span></span><br><span class="line">	<span class="type">int</span> pushed_cnt = <span class="number">0</span>;<span class="comment">//已经装入的数量</span></span><br><span class="line">	<span class="type">int</span> pushed_value = <span class="number">0</span>;<span class="comment">//已经装入的价值</span></span><br><span class="line">	<span class="type">int</span> max_value = <span class="number">-1</span>;<span class="comment">//记录已装入的最大价值</span></span><br><span class="line">	<span class="comment">//回溯整个背包的所有物品</span></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">backTrack</span><span class="params">(<span class="type">int</span> start, vector&lt;<span class="type">int</span>&gt; W, vector&lt;<span class="type">int</span>&gt; V,<span class="type">int</span> bag_w)</span> </span>&#123;</span><br><span class="line">		<span class="comment">//start 初始遍历坐标，W记录物品重量容器,V记录物品价值容器,bag_w背包最大重量</span></span><br><span class="line">		<span class="comment">//当等于或超过背包上限或者所有物品都遍历完，则退出循环</span></span><br><span class="line">		<span class="keyword">if</span> (start&gt;=W.<span class="built_in">size</span>()||(pushed_cnt == W.<span class="built_in">size</span>() || pushed_weight == bag_w))&#123;</span><br><span class="line">			<span class="keyword">if</span> (max_value &lt; pushed_value)</span><br><span class="line">				max_value = pushed_value;</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//开始回溯</span></span><br><span class="line">		<span class="keyword">for</span> (<span class="type">int</span> i = start;i &lt; W.<span class="built_in">size</span>();i++) &#123;</span><br><span class="line">			<span class="keyword">if</span> (pushed_weight + W[i] &lt;= bag_w) &#123;</span><br><span class="line">				pushed_weight += W[i];</span><br><span class="line">				pushed_value += V[i];</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span> <span class="keyword">continue</span>;</span><br><span class="line">			<span class="built_in">backTrack</span>(i + <span class="number">1</span>, W, V, bag_w);</span><br><span class="line">            <span class="comment">//回溯完成后从背包中取出物品</span></span><br><span class="line">			pushed_weight -= W[i];</span><br><span class="line">			pushed_value -= V[i];</span><br><span class="line">		&#125;</span><br><span class="line">	 &#125;</span><br><span class="line">	 <span class="function"><span class="type">int</span> <span class="title">solving</span><span class="params">(<span class="type">int</span> start, vector&lt;<span class="type">int</span>&gt; W, vector&lt;<span class="type">int</span>&gt; V, <span class="type">int</span> bag_w)</span> </span>&#123;</span><br><span class="line">		 <span class="built_in">backTrack</span>(start, W, V, bag_w);</span><br><span class="line">		 <span class="keyword">return</span> max_value;</span><br><span class="line">	 &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="type">int</span> val;</span><br><span class="line">	<span class="comment">//创建物品容器</span></span><br><span class="line">	vector&lt;<span class="type">int</span>&gt; weight;<span class="comment">//物品重量</span></span><br><span class="line">	vector&lt;<span class="type">int</span>&gt; value;<span class="comment">//物品价值</span></span><br><span class="line">	<span class="type">bool</span> bag_continue = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">while</span> (bag_continue) &#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;输入物品重量: &quot;</span>;</span><br><span class="line">		<span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">			cin &gt;&gt; val;</span><br><span class="line">			<span class="keyword">if</span> (val &gt; <span class="number">0</span>)</span><br><span class="line">				weight.<span class="built_in">push_back</span>(val);</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;输入物品价值: &quot;</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>;i &lt; weight.<span class="built_in">size</span>();i++)</span><br><span class="line">		&#123;</span><br><span class="line">			cin &gt;&gt; val;</span><br><span class="line">			value.<span class="built_in">push_back</span>(val);</span><br><span class="line">		&#125;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;输入背包重量: &quot;</span>;</span><br><span class="line">		<span class="type">int</span> bag_weight;</span><br><span class="line">		cin &gt;&gt; bag_weight;</span><br><span class="line">		Knapsack res;</span><br><span class="line">		cout &lt;&lt; res.<span class="built_in">solving</span>(<span class="number">0</span>, weight, value, bag_weight) &lt;&lt; endl;</span><br><span class="line">		weight.<span class="built_in">clear</span>();</span><br><span class="line">		value.<span class="built_in">clear</span>();</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;继续下一轮？(1/0)&quot;</span>;</span><br><span class="line">		cin &gt;&gt; bag_continue;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p><strong>运行结果</strong></p>
 <blockquote>
-<p>输入物品重量: 1 3 4 -1<br>输入物品价值: 15 20 30<br>输入背包重量: 4<br>35<br>继续下一轮？(1&#x2F;0)1<br>输入物品重量: 3 1 3 4 -1<br>输入物品价值: 15 200 20 30<br>输入背包重量: 4<br>220<br>继续下一轮？(1&#x2F;0)1<br>输入物品重量: 2 3 4 1 5 5<br>-1<br>输入物品价值: 2 23 22 5 3 12<br>输入背包重量: 14<br>62<br>继续下一轮？(1&#x2F;0)0</p>
+<p>输入物品重量: 1 3 4 -1<br>
+输入物品价值: 15 20 30<br>
+输入背包重量: 4<br>
+35<br>
+继续下一轮？(1/0)1<br>
+输入物品重量: 3 1 3 4 -1<br>
+输入物品价值: 15 200 20 30<br>
+输入背包重量: 4<br>
+220<br>
+继续下一轮？(1/0)1<br>
+输入物品重量: 2 3 4 1 5 5<br>
+-1<br>
+输入物品价值: 2 23 22 5 3 12<br>
+输入背包重量: 14<br>
+62<br>
+继续下一轮？(1/0)0</p>
 </blockquote>
-<h3 id="二维动规数组"><a href="#二维动规数组" class="headerlink" title="二维动规数组"></a>二维动规数组</h3><p>​		如果采用动态规划的思路来求解背包问题，使用二维数组来记录过程值是比较好理解的一种方式。用dp[i][j]来表示这个数组，行号i 表示可取物品在0~i编号中选取，列号j 表示此时的背包容量，注意区分，此时这个背包容量与给定的背包容量是不同的。动态规划的思路是将最终目标分化为一个个小的目标来逼近，j所代表的背包容量即为求这些”小目标”时的背包容量。</p>
+<h3 id="二维动规数组"><a class="header-anchor" href="#二维动规数组">¶</a>二维动规数组</h3>
+<p>​		如果采用动态规划的思路来求解背包问题，使用二维数组来记录过程值是比较好理解的一种方式。用dp[i][j]来表示这个数组，行号i 表示可取物品在0~i编号中选取，列号j 表示此时的背包容量，注意区分，此时这个背包容量与给定的背包容量是不同的。动态规划的思路是将最终目标分化为一个个小的目标来逼近，j所代表的背包容量即为求这些&quot;小目标&quot;时的背包容量。</p>
 <p>​		在理解了dp数组所表示的含有后，给出如下的代码</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;map&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">Knapsack</span><span class="params">( vector&lt;<span class="type">int</span>&gt; goods_weight, vector&lt;<span class="type">int</span>&gt; goods_value,<span class="type">int</span> bag_weight)</span> </span>&#123;</span><br><span class="line">	<span class="comment">//建立dp数组，初始化为0</span></span><br><span class="line">	<span class="comment">//dp数组横坐标i表示可选物品标号0-i,纵坐标j表示此刻的背包重量</span></span><br><span class="line">	vector&lt;vector&lt;<span class="type">int</span>&gt; &gt;<span class="built_in">dp</span>(goods_weight.<span class="built_in">size</span>() , <span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;(bag_weight+<span class="number">1</span>,<span class="number">0</span>));</span><br><span class="line">	<span class="comment">//第一列为背包为0时的最大价值量，仍为0</span></span><br><span class="line">	<span class="comment">//第一行的初始化</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> j = bag_weight;j - goods_weight[<span class="number">0</span>]&gt;=<span class="number">0</span>;j--) &#123;</span><br><span class="line">		dp[<span class="number">0</span>][j] = goods_value[<span class="number">0</span>];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//理解二维dp数组的更新可以理解成列相关的更新，每次更新新的物品是，比较腾出该物品的空间放入背包后的价值量是否增加</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>;i &lt; goods_weight.<span class="built_in">size</span>();i++) &#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>;j &lt;= bag_weight;j++) &#123;</span><br><span class="line">			<span class="keyword">if</span> (j &lt; goods_weight[i])dp[i][j] = dp[i<span class="number">-1</span>][j];<span class="comment">//此时背包容量容不下，此点处值为上一行的值</span></span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">			&#123;	<span class="comment">//若能容下比较选择物品加入背包和不选择该物品加入背包的价值量</span></span><br><span class="line">				dp[i][j] = <span class="built_in">max</span>(dp[i - <span class="number">1</span>][j - goods_weight[i]] + goods_value[i], dp[i - <span class="number">1</span>][j]);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> dp[goods_weight.<span class="built_in">size</span>() - <span class="number">1</span>][bag_weight];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	vector&lt;<span class="type">int</span>&gt; weight = &#123; <span class="number">1</span>, <span class="number">3</span>, <span class="number">4</span> &#125;;</span><br><span class="line">	vector&lt;<span class="type">int</span>&gt; value = &#123; <span class="number">15</span>, <span class="number">20</span>, <span class="number">30</span> &#125;;</span><br><span class="line">	<span class="type">int</span> bag = <span class="number">4</span>;</span><br><span class="line">	cout &lt;&lt; <span class="built_in">Knapsack</span>(weight, value, bag);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p><strong>运行结果</strong></p>
 <blockquote>
 <p>35</p>
 </blockquote>
-<h3 id="滚动数组"><a href="#滚动数组" class="headerlink" title="滚动数组"></a>滚动数组</h3><p>​		在写二维动态数组的时候，能明显感受到一个点处与上一个阶段的背包容量相关性很小，所以是否有一个方案，可以将二维数组压缩为一维数组？答案是有的。设dp[j]，j表示背包的不同阶段的质量，而数组值表示这一轮循环中可选物品中能组合出的最大的价值。</p>
+<h3 id="滚动数组"><a class="header-anchor" href="#滚动数组">¶</a>滚动数组</h3>
+<p>​		在写二维动态数组的时候，能明显感受到一个点处与上一个阶段的背包容量相关性很小，所以是否有一个方案，可以将二维数组压缩为一维数组？答案是有的。设dp[j]，j表示背包的不同阶段的质量，而数组值表示这一轮循环中可选物品中能组合出的最大的价值。</p>
 <p>​		算法的整体思路与二维数组的方案大同小异，用一层循环遍历物品，每次循环多将一个物品纳入可考量的范畴，第二层循环是比较有新的物品加入选择范畴后价值的最大量是否发生变化。</p>
 <p>​		有一点需要注意，第二层遍历背包容量时，不能从小到大遍历，因为每次有新的物品纳入选择范畴时都会加一下物品价值进行比较，并且dp数组质量大的是从质量小的推出来的，所以会出现物品价值重复累加的bug。拿一个例子：</p>
 <table>
@@ -721,7 +736,8 @@
 <th>价值</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>物品0</td>
 <td>1</td>
 <td>15</td>
@@ -736,23 +752,26 @@
 <td>4</td>
 <td>30</td>
 </tr>
-</tbody></table>
-<p>​		 dp[1]&#x3D;dp[0]+15;</p>
-<p>​	    dp[2]&#x3D;dp[2-1]+15;</p>
+</tbody>
+</table>
+<p>​		 dp[1]=dp[0]+15;</p>
+<p>​	    dp[2]=dp[2-1]+15;</p>
 <p>​		本身dp[1]已经加了15了，dp[2]由dp[1]推出，所以在加了15的前提上又加了15，导致错误。</p>
 <p>​		但是从后往前遍历就没这个问题了，在没进行价值比较时，前方的数组值要么是初始值0，要么是上个循环产生的前i-1个物品所得出的最大价值量，不会产生重复加和的错误。</p>
 <p>​		另外，如果选用一维数组来解决背包问题时，必须先遍历物品在遍历背包容量，二维数组先遍历谁都可以。二维数组有充足的空间记录每个阶段的状态值；而一维数组空间有限，背包重量作为坐标充当索引后，就只能根据物品个数一层层向上迭代。</p>
 <p>​		给出的代码打印出滚动数组的更新过程</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;map&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">Knapsack</span><span class="params">( vector&lt;<span class="type">int</span>&gt; goods_weight, vector&lt;<span class="type">int</span>&gt; goods_value,<span class="type">int</span> bag_weight)</span> </span>&#123;</span><br><span class="line">	<span class="comment">//建立dp数组，初始化为0</span></span><br><span class="line">	<span class="type">int</span> goods_size = goods_value.<span class="built_in">size</span>();<span class="comment">//goods_size表示物品数量</span></span><br><span class="line">	vector&lt;<span class="type">int</span>&gt;<span class="built_in">dp</span>(bag_weight+<span class="number">1</span>,<span class="number">0</span>);</span><br><span class="line">	<span class="comment">//先物品遍历</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>;i &lt; goods_size;i++) &#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;第&quot;</span> &lt;&lt; i + <span class="number">1</span> &lt;&lt; <span class="string">&quot;轮遍历: &quot;</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="type">int</span> j = bag_weight;j &gt;= goods_weight[i];j--) &#123;</span><br><span class="line">			dp[j] = <span class="built_in">max</span>(dp[j], dp[j - goods_weight[i]] + goods_value[i]);<span class="comment">//加入新物品与不加新物品价值量的比较</span></span><br><span class="line">			cout &lt;&lt; <span class="string">&quot;d[&quot;</span>&lt;&lt;j&lt;&lt;<span class="string">&quot;] = &quot;</span> &lt;&lt; dp[j] &lt;&lt; <span class="string">&quot; &quot;</span>;<span class="comment">//输出数组迭代过程</span></span><br><span class="line">		&#125;</span><br><span class="line">		cout &lt;&lt; endl;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> dp[bag_weight];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	vector&lt;<span class="type">int</span>&gt; weight = &#123; <span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">7</span> &#125;;</span><br><span class="line">	vector&lt;<span class="type">int</span>&gt; value = &#123; <span class="number">20</span>, <span class="number">15</span>, <span class="number">30</span> ,<span class="number">45</span>&#125;;</span><br><span class="line">	<span class="type">int</span> bag = <span class="number">10</span>;</span><br><span class="line">	cout &lt;&lt; <span class="built_in">Knapsack</span>(weight, value, bag);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p><strong>运行结果</strong></p>
 <blockquote>
-<p>第1轮遍历: d[10] &#x3D; 20 d[9] &#x3D; 20 d[8] &#x3D; 20 d[7] &#x3D; 20 d[6] &#x3D; 20 d[5] &#x3D; 20 d[4] &#x3D; 20 d[3] &#x3D; 20 d[2] &#x3D; 20 d[1] &#x3D; 20<br>第2轮遍历: d[10] &#x3D; 35 d[9] &#x3D; 35 d[8] &#x3D; 35 d[7] &#x3D; 35 d[6] &#x3D; 35 d[5] &#x3D; 35 d[4] &#x3D; 35 d[3] &#x3D; 20<br>第3轮遍历: d[10] &#x3D; 65 d[9] &#x3D; 65 d[8] &#x3D; 65 d[7] &#x3D; 50 d[6] &#x3D; 50 d[5] &#x3D; 50 d[4] &#x3D; 35<br>第4轮遍历: d[10] &#x3D; 65 d[9] &#x3D; 65 d[8] &#x3D; 65 d[7] &#x3D; 50<br>65</p>
+<p>第1轮遍历: d[10] = 20 d[9] = 20 d[8] = 20 d[7] = 20 d[6] = 20 d[5] = 20 d[4] = 20 d[3] = 20 d[2] = 20 d[1] = 20<br>
+第2轮遍历: d[10] = 35 d[9] = 35 d[8] = 35 d[7] = 35 d[6] = 35 d[5] = 35 d[4] = 35 d[3] = 20<br>
+第3轮遍历: d[10] = 65 d[9] = 65 d[8] = 65 d[7] = 50 d[6] = 50 d[5] = 50 d[4] = 35<br>
+第4轮遍历: d[10] = 65 d[9] = 65 d[8] = 65 d[7] = 50<br>
+65</p>
 </blockquote>
 ]]></content>
       <categories>
-        <category>算法思想</category>
-        <category>算法实现</category>
+        <category>基础数据结构与算法思想</category>
       </categories>
       <tags>
         <tag>动态规划</tag>
@@ -1660,6 +1679,33 @@
       <tags>
         <tag>C++</tag>
         <tag>字符串</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Swiss Army Man</title>
+    <url>/2023/03/07/Swiss%20Army%20Man/</url>
+    <content><![CDATA[<p>At the film’s beginning, Hank (Paul Dano) prepares to commit suicide on a deserted island, and suddenly a corpse is washed ashore by the waves. Interestingly, this corpse is farting every second, which disturbs Hank’s suicide. Hence Hank goes ahead and has a look. Then Hank stops killing himself, dragging the dead man named Manny by Hank, into a cave. It is so funny that Harry Porter’s actor, Daniel Radcliffe, portrays the never-stop-farted corpse so that reports tell the story bluntly: Daniel Radcliffe farts a lot in this movie.</p>
+<span id="more"></span>
+<p>A fascinating set in this film is that Manny is a multipurpose tool guy, just like the film’s name–swiss army man. Hank can be propelled forward by Manny, which could emit gas from the body’s bowels. This idea is so funny. The picture that Hank triumphantly mounts Manny, yanks down his pants, raises a hand and speeds across the waves are somewhat gay.<br>
+Regarding farting, I can’t forget the scene where Manny takes Hank out of the water just by farting, like a rocket takes off. Hank is desperate at one time. He never dreams the flatulent corpse can help him anymore.</p>
+<p>Stranded on a desert island (at least for first-time viewers), Hank suffers from starvation and hydroponics, so Hank wants to abandon this useless body. The miracle occurs now, and the pale corpse can be pumped for a miraculous stream of drinkable water so that Hank can stay hydrated from the water streams from Manny’s mouth. Before long, Hank gradually figures out ingenious ways to use Manny’s body like a Swiss Army Knife, ricocheting string from the body’s gullet to scrounge up cliffs, cutting woods by body’s hand, and killing wild for meats by rocks launched by mouth. And then, Manny regains the limited ability to speak, which means Hank can talk with a dead person, to some extent reminding viewers that Hank’s experience is illusory, probably caused by the split personality or taking drugs or something else. Besides, when Manny’s penis erection, it surprisingly points to the direction of human society, which means Hank knows inside how to steer to civilization.</p>
+<p>Overall, there are just two main characters in this movie, and one character is a dead man. Ninety-seven minutes of poop gags and masturbation talk might be boring and vulgar, but adding some reflection can be different.<br>
+Leading viewers to Hank’s imaginary world and getting outside depend on viewers’ whether find details and reasoning ability. Manny is a reflection of the personality which Hank unwilling to face. This personality knows every detail of Hank’s deficiencies. Hank is afraid farting in front of other people but Manny will. From Manny’s judgement we can cryptically tell that Hank hates himself.<br>
+&quot;But you ran away ‘cause nobody loves you?<br>
+You’re broken and empty and dirty<br>
+and smelly and useless and old.<br>
+You’re like trash, right? &quot;<br>
+This was as much Manny’s opinion as Hank’s own.<br>
+And this movie conveys the attitude for a living–do not care too much about others’ judgement, namely, that it is full of reasons for living.</p>
+<p>The film’s plot twists and turns. An impressive detail is the mobile phone’s owner. In the imaginary world, we viewers are all misled by Hank thinking Manny owns the phone. Until the interview, the journalist muddles up the protagonist’s name and polices call up Hank’s father by the phone instead of Manny’s, and then I know that I am tricked by the director. Besides, who loves Sarah and Swiss Army Man drifts away at the end are also exciting and thought-provoking scenarios.</p>
+<p>From the tidbits, we know Radcliffe has many ‘substitutes’ made exquisitely by artists. They are mannequins. The surfing scenario is challenging to make it. What viewers saw was pictured by how Paul rode on a dummy built into a surfboard with an engine. The shot of the mouth spraying water is achieved through putting a water pipe into Radcliffe’s mouth. The most impressive prop, nothing better than the electric moving rod made to show Manny’s penis can point the direction.</p>
+<p>This film’s music is very vacant. The sound “babababa~” is rhythm.</p>
+]]></content>
+      <categories>
+        <category>英文影评</category>
+      </categories>
+      <tags>
+        <tag>英语学习</tag>
       </tags>
   </entry>
 </search>
