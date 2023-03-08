@@ -28,7 +28,7 @@
 <meta property="og:description" content="最近发现对c++的二维数组的传参产生遗忘，写此文来回顾下二维数组作为函数参数形式的传递。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-01-14T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-02-06T04:41:48.453Z">
+<meta property="article:modified_time" content="2023-03-08T03:19:28.470Z">
 <meta property="article:author" content="Yestin-王">
 <meta property="article:tag" content="C++">
 <meta name="twitter:card" content="summary">
@@ -192,7 +192,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-02-06 12:41:48" itemprop="dateModified" datetime="2023-02-06T12:41:48+08:00">2023-02-06</time>
+                <time title="修改时间：2023-03-08 11:19:28" itemprop="dateModified" datetime="2023-03-08T11:19:28+08:00">2023-03-08</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -202,10 +202,6 @@
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/C-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">C++学习笔记</span></a>
                 </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/C-%E6%8B%BE%E9%81%97/" itemprop="url" rel="index"><span itemprop="name">C++拾遗</span></a>
-                </span>
             </span>
 
           <br>
@@ -214,7 +210,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>898</span>
+              <span>901</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -235,25 +231,21 @@
       
         <p>最近发现对c++的二维数组的传参产生遗忘，写此文来回顾下二维数组作为函数参数形式的传递。</p>
 <span id="more"></span>
-
-<h3 id="固定维度"><a href="#固定维度" class="headerlink" title="固定维度"></a>固定维度</h3><p>先定义一个三行三列数组</p>
+<h3 id="固定维度"><a class="header-anchor" href="#固定维度">¶</a>固定维度</h3>
+<p>先定义一个三行三列数组</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> arr[<span class="number">3</span>][<span class="number">3</span>] = &#123; &#123;<span class="number">1</span>,<span class="number">2</span>&#125;,&#123;<span class="number">2</span>,<span class="number">3</span>&#125;,&#123;<span class="number">2</span>,<span class="number">3</span>&#125; &#125;;</span><br></pre></td></tr></table></figure>
-
 <p>二维数组作为函数的参数，总体只有以下几种写法。函数的参数声明中必须指出数组的列数，与数组的行数没有太大的关系。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">test01</span><span class="params">(<span class="type">int</span> (*array)[<span class="number">3</span>])</span> </span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;(*array)[3]传参成功&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test02</span><span class="params">(<span class="type">int</span> array[<span class="number">3</span>][<span class="number">3</span>])</span> </span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;array[3][3]传参成功&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test03</span><span class="params">(<span class="type">int</span> array[][<span class="number">3</span>])</span> </span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;array[][3]传参成功&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>以下几种方式是不合法的</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">test04</span><span class="params">(<span class="type">int</span> array[][])</span></span>&#123;&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test05</span><span class="params">(<span class="type">int</span> array[<span class="number">3</span>][])</span></span>&#123;&#125;</span><br></pre></td></tr></table></figure>
-
 <p>注意，这种写法是相当于声明了一个数组，该数组包含着3个指向整型对象的指针</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">test06</span><span class="params">(<span class="type">int</span> *arr[<span class="number">3</span>])</span></span>&#123;&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="动态二维数组"><a href="#动态二维数组" class="headerlink" title="动态二维数组"></a>动态二维数组</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">vla</span><span class="params">(<span class="type">int</span> m,<span class="type">int</span> n,<span class="type">int</span> arr[m][n])</span></span>&#123;&#125;		<span class="comment">//正确</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">vla</span><span class="params">(<span class="type">int</span> arr[m][n]，<span class="type">int</span> m,<span class="type">int</span> n)</span></span>&#123;&#125;	   <span class="comment">//错误</span></span><br></pre></td></tr></table></figure>
-
+<h3 id="动态二维数组"><a class="header-anchor" href="#动态二维数组">¶</a>动态二维数组</h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">vla</span><span class="params">(<span class="type">int</span> m,<span class="type">int</span> n,<span class="type">int</span> arr[m][n])</span></span>&#123;&#125;		<span class="comment">//正确</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">vla</span><span class="params">(<span class="type">int</span> arr[m][n]，<span class="type">int</span> m,<span class="type">int</span> n)</span></span>&#123;&#125;	   <span class="comment">//错误</span></span><br></pre></td></tr></table></figure>
 <p>很奇怪，VS 2022社区版的编译器竟然不支持VLA。</p>
-<h3 id="vector的形式使用二维数组"><a href="#vector的形式使用二维数组" class="headerlink" title="vector的形式使用二维数组"></a>vector的形式使用二维数组</h3><p>对于不支持VLA的编译器完全可以用vector替代数组形式。如建立一个n行n列的布尔型二维数组变量</p>
+<h3 id="vector的形式使用二维数组"><a class="header-anchor" href="#vector的形式使用二维数组">¶</a>vector的形式使用二维数组</h3>
+<p>对于不支持VLA的编译器完全可以用vector替代数组形式。如建立一个n行n列的布尔型二维数组变量</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> n = <span class="number">3</span>;</span><br><span class="line">vector &lt; vector&lt;<span class="type">bool</span>&gt;&gt; <span class="built_in">putQ</span>(n,<span class="built_in">vector</span>&lt;<span class="type">bool</span>&gt;(n,<span class="literal">true</span>));<span class="comment">//设置初值为真</span></span><br></pre></td></tr></table></figure>
-
 
     </div>
 
